@@ -22,10 +22,10 @@ public class NFA extends FSA {
     /**
      * Process a raw line of input and add a new state, along with its
      * transitions, to the NFA.
-     * @param rawState A state followed by a list of transitions, lined
+     * @param rawState: A state followed by a list of transitions, lined
      *                 up with the order the characters from the alphabet
      *                 were defined
-     * @return True if the addition was a success, False if it wasn't (for
+     * @return True: if the addition was a success, False if it wasn't (for
      *                  instance if the  current automaton is a DFA but the
      *                  input is destined for an NFA)
      */
@@ -58,7 +58,7 @@ public class NFA extends FSA {
 
     /**
      * Run the FSA on the given string
-     * @param str A string made up of characters in the FSA's alphabet
+     * @param str: A string made up of characters in the FSA's alphabet
      * @return "accept" if the FSA reaches an accept state after
      *          reading in whole string, or "reject" if the FSA does not.
      *          Running the FSA on a string containing characters outside
@@ -107,7 +107,7 @@ public class NFA extends FSA {
 
     /**
      * Format the NFA in the style described in Homework 2, Question 4.
-     * @return A formatted multiline String describing the NFA
+     * @return A: formatted multiline String describing the NFA
      */
     @Override
     public String toString() {
@@ -149,9 +149,9 @@ public class NFA extends FSA {
 
     /**
      * The transition function for this DFA.
-     * @param q The state, a member of states.keySet()
-     * @param a The input letter, a member of alphabet
-     * @return The states determined by the transition function, equivalent to
+     * @param q: The state, a member of states.keySet()
+     * @param a: The input letter, a member of alphabet
+     * @return The: states determined by the transition function, equivalent to
      *             G(q: Q, a: S)
      */
     protected List<String> delta(String q, String a) {
@@ -165,9 +165,9 @@ public class NFA extends FSA {
      * If the transition function is not yet defined for the given state or the
      * given character, this method will initialize the necessary fields.
      *
-     * @param q The state, a member of states.keySet()
-     * @param a The input letter, a member of alphabet
-     * @param value The desired transition list
+     * @param q: The state, a member of states.keySet()
+     * @param a: The input letter, a member of alphabet
+     * @param value: The desired transition list
      */
     protected void setDelta(String q, String a, List<String> value) {
         transitions.put(new Pair<>(q, a), value);
@@ -185,13 +185,13 @@ public class NFA extends FSA {
     /**
      * Produces a copy of this NFA converted to a DFA, as described in
      * the proof for Theorem 1.39.
-     * @param nfa The NFA to be converted, of the form
+     * @param nfa: The NFA to be converted, of the form
      *            States:           Q
      *            Alphabet:         S
      *            Transitions:      G
      *            Start State:      q_0
      *            Accept States:    F
-     * @return An equivalent DFA with the form
+     * @return An: equivalent DFA with the form
      *            States:           Q' = P(Q)
      *            Alphabet:         S
      *            Transitions:      G'(R: Q', a: S) -> { q: Q | q: E(G(r, a)
@@ -212,19 +212,19 @@ public class NFA extends FSA {
     /**
      * Generate the union of the two provided NFA's as described in the proof for Theorem
      * 1.45.
-     * @param n1 The first NFA in the union, of the form
+     * @param n1: The first NFA in the union, of the form
      *            States:           Q_1
      *            Alphabet:         S_1
      *            Transitions:      G_1
      *            Start State:      q_1
      *            Accept States:    F_1
-     * @param n2 The second NFA in the union, of the form
+     * @param n2: The second NFA in the union, of the form
      *            States:           Q_2
      *            Alphabet:         S_2
      *            Transitions:      G_2
      *            Start State:      q_2
      *            Accept States:    F_2
-     * @return The union of n1 and n2, an NFA with the form
+     * @return The: union of n1 and n2, an NFA with the form
      *            States:           Q = { q_0 } U Q_1 U Q_2
      *            Alphabet:         S = S_1 U S_2
      *            Transitions:      G(q: Q, a: S_e) -> {
@@ -292,19 +292,19 @@ public class NFA extends FSA {
     /**
      * Generate the concatenation of the two provided NFA's as described in
      * the proof for Theorem 1.46.
-     * @param n1 The first NFA in the union, of the form
+     * @param n1: The first NFA in the union, of the form
      *            States:           Q_1
      *            Alphabet:         S_1
      *            Transitions:      G_1
      *            Start State:      q_1
      *            Accept States:    F_1
-     * @param n2 The second NFA in the union, of the form
+     * @param n2: The second NFA in the union, of the form
      *            States:           Q_2
      *            Alphabet:         S_2
      *            Transitions:      G_2
      *            Start State:      q_2
      *            Accept States:    F_2
-     * @return The concatenation of n1 and n2, an NFA with the form
+     * @return The: concatenation of n1 and n2, an NFA with the form
      *            States:           Q = Q_1 U Q_2
      *            Alphabet:         S = S_1 U S_2
      *            Transitions:      G(q: Q, a: S_e) -> {
@@ -366,13 +366,13 @@ public class NFA extends FSA {
 
     /**
      * Generate the star of the provided NFA as described in the proof for Theorem 1.47.
-     * @param n The NFA to be starred, of the form
+     * @param n: The NFA to be starred, of the form
      *            States:           Q
      *            Alphabet:         S
      *            Transitions:      G
      *            Start State:      q_1
      *            Accept States:    F
-     * @return The NFA produced by starring n, with the form
+     * @return The: NFA produced by starring n, with the form
      *            States:           Q' = { q_0 } U Q_1
      *            Alphabet:         S
      *            Transitions:      G'(q: Q', a: S) -> {

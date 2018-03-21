@@ -1,11 +1,11 @@
 import kotlin.text.Regex
 
 /**
- * @author Spencer Ward
- * @date March 22, 2018
+ * @author: Spencer Ward
+ * @date: March 22, 2018
  *
- * A class for parsing, running, printing, and converting regular expressions
- * . This meets problems 1 and 4 on COS 451, Homework 4
+ * A class for parsing, running, printing, and converting regular expressions.
+ * This meets problems 1 and 4 on COS 451, Homework 4.
  */
 
 class RegExp(expression: String) {
@@ -16,7 +16,7 @@ class RegExp(expression: String) {
     // The list of subexpressions, if this is a regular expression operation
     private var innerExpressions: List<RegExp>? = null
 
-    // The type of operation type of the outer regular expression
+    // The operation type of the outer regular expression
     private lateinit var operation: Operator
 
     private enum class Operator {
@@ -199,8 +199,8 @@ class RegExp(expression: String) {
 
     /**
      * Run the regular expression on the given string.
-     * @param s The string being checked against this regular expression
-     * @return True if the string matches, false otherwise
+     * @param s: The string being checked against this regular expression
+     * @return True: if the string matches, false otherwise
      */
     fun runOn(s: String): Boolean {
         return when (operation) {

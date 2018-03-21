@@ -40,7 +40,7 @@ public abstract class FSA {
 
     /**
      * Create a new FSA with the given label.
-     * @param label A descriptive identifier for the automaton
+     * @param label: A descriptive identifier for the automaton
      */
     public FSA(String label) {
         this.label = label;
@@ -91,10 +91,10 @@ public abstract class FSA {
     /**
      * Process a raw line of input and add a new state, along with its
      * transitions, to the FSA.
-     * @param rawState A state followed by a list of transitions, lined
+     * @param rawState: A state followed by a list of transitions, lined
      *                 up with the order the characters from the alphabet
      *                 were defined
-     * @return True if the addition was a success, False if it wasn't (for
+     * @return True: if the addition was a success, False if it wasn't (for
      *                  instance if the  current automaton is a DFA but the
      *                  input is destined for an NFA)
      */
@@ -137,7 +137,7 @@ public abstract class FSA {
 
     /**
      * Format the FSA in the style described in Homework 2, Question 4.
-     * @return A formatted multiline String describing the FSA
+     * @return A: formatted multiline String describing the FSA
      */
     @Override
     public abstract String toString();
@@ -172,8 +172,8 @@ public abstract class FSA {
 
     /**
      * Run the FSA on the given string
-     * @param str A string made up of characters in the FSA's alphabet
-     * @return "accept" if the FSA reaches an accept state after
+     * @param str: A string made up of characters in the FSA's alphabet
+     * @return "accept": if the FSA reaches an accept state after
      *          reading in whole string, or "reject" if the FSA does not.
      *          Running the FSA on a string containing characters outside
      *          of the alphabet automatically returns "reject".
@@ -183,8 +183,8 @@ public abstract class FSA {
     /**
      * Process a raw line of input and set the alphabet of the FSA to the
      * given values.
-     * @param rawAlphabet A string of characters separated by whitespace
-     * @return 0 if the input seems to be destined for a DFA, 1 if the input
+     * @param rawAlphabet: A string of characters separated by whitespace
+     * @return 0: if the input seems to be destined for a DFA, 1 if the input
      * is destined for an NFA (i.e. its alphabet includes epsilon)
      */
     public int setAlphabet(String rawAlphabet) {
@@ -211,8 +211,8 @@ public abstract class FSA {
 
     /**
      * Remove unreachable states.
-     * @param fsa The FSA to be pruned
-     * @return A copy of the FSA that has been pruned
+     * @param fsa: The FSA to be pruned
+     * @return A: copy of the FSA that has been pruned
      */
     public static FSA prune(FSA fsa) {
         // Create a new DFA or NFA, copying the label from the old one
@@ -372,9 +372,9 @@ public abstract class FSA {
      *
      * Therefore A and B are equivalent iff C contains no accept states.
      *
-     * @param a The first FSA
-     * @param b The second FSA
-     * @return True if the two FSA's are equivalent, false otherwise
+     * @param a: The first FSA
+     * @param b: The second FSA
+     * @return True: if the two FSA's are equivalent, false otherwise
      */
     public static boolean equivP(FSA a, FSA b) {
         // To save time, we'll convert our FSA's to NFA's

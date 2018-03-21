@@ -7,8 +7,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author Spencer Ward
- * @date February 15, 2017
+ * @author: Spencer Ward
+ * @date: February 15, 2017
  *
  * An interactive interpreter for the language Lexaard, defined in Homework 2
  * Question 4.
@@ -57,7 +57,7 @@ public class LexaardInterpreter {
 
     /**
      * Process commands and their arguments.
-     * @param userInput The raw user input, trimmed of spaces
+     * @param userInput: The raw user input, trimmed of spaces
      */
     private void processCommand(String userInput) {
         Scanner line = new Scanner(userInput.trim());
@@ -120,7 +120,7 @@ public class LexaardInterpreter {
 
     /**
      * Register a string or an FSA by label.
-     * @param object The raw arguments from the command
+     * @param object: The raw arguments from the command
      */
     private void registerObject(String object) {
         // Regex to match the form '<label> "<text>"'
@@ -167,8 +167,8 @@ public class LexaardInterpreter {
 
     /**
      * Register a parsed string
-     * @param name The label to attach to the stored string
-     * @param str The text that the string contains
+     * @param name: The label to attach to the stored string
+     * @param str: The text that the string contains
      */
     private void registerString(String name, String str) {
         // If an automaton is already registered with this label, replace it
@@ -183,8 +183,8 @@ public class LexaardInterpreter {
 
     /**
      * Register a parsed FSA
-     * @param name The label to attach to the stored FSA
-     * @param fsa The object that matches the user's desired FSA
+     * @param name: The label to attach to the stored FSA
+     * @param fsa: The object that matches the user's desired FSA
      */
     private void registerFSA(String name, FSA fsa) {
         // If a string is already registered by this label, replace it with
@@ -198,8 +198,8 @@ public class LexaardInterpreter {
 
     /**
      * Convert the given NFA to an equivalent DFA.
-     * @param fsa The NFA (or DFA) to be converted
-     * @return The provided FSA converted to a DFA
+     * @param fsa: The NFA (or DFA) to be converted
+     * @return The: provided FSA converted to a DFA
      */
     private DFA nfa2dfa(FSA fsa) {
         if (fsa instanceof NFA) {
@@ -212,9 +212,9 @@ public class LexaardInterpreter {
 
     /**
      * Compute the union of two DFA's.
-     * @param dfa1 The first DFA in the union
-     * @param dfa2 The second DFA in the union
-     * @return The union of the two provided DFA's
+     * @param dfa1: The first DFA in the union
+     * @param dfa2: The second DFA in the union
+     * @return The: union of the two provided DFA's
      */
     private DFA dfaUnion(FSA dfa1, FSA dfa2) {
         if (dfa1 instanceof DFA && dfa2 instanceof DFA) {
@@ -226,9 +226,9 @@ public class LexaardInterpreter {
 
     /**
      * Compute the union of two NFA's.
-     * @param nfa1 The first NFA in the union
-     * @param nfa2 The second NFA in the union
-     * @return The union of the two provided NFA's
+     * @param nfa1: The first NFA in the union
+     * @param nfa2: The second NFA in the union
+     * @return The: union of the two provided NFA's
      */
     private NFA nfaUnion(FSA nfa1, FSA nfa2) {
         if (nfa1 instanceof NFA && nfa2 instanceof  NFA) {
@@ -240,9 +240,9 @@ public class LexaardInterpreter {
 
     /**
      * Generate the concatenation of the two provided NFA's.
-     * @param nfa1 The first NFA in the concatenation
-     * @param nfa2 The second NFA in the concatenation
-     * @return The concatenation of the two NFA's
+     * @param nfa1: The first NFA in the concatenation
+     * @param nfa2: The second NFA in the concatenation
+     * @return The: concatenation of the two NFA's
      */
     private NFA nfaConcat(FSA nfa1, FSA nfa2) {
         if (nfa1 instanceof NFA && nfa2 instanceof  NFA) {
@@ -254,8 +254,8 @@ public class LexaardInterpreter {
 
     /**
      * Generate the star of the provided NFA.
-     * @param nfa The NFA to take the star of
-     * @return The result of starring the NFA
+     * @param nfa: The NFA to take the star of
+     * @return The: result of starring the NFA
      */
     private NFA nfaStar(FSA nfa) {
         if (nfa instanceof NFA) {
@@ -267,8 +267,8 @@ public class LexaardInterpreter {
 
     /**
      * Remove unreachable states from the given FSA.
-     * @param fsa The FSA to be pruned
-     * @return A copy of the FSA that has been pruned
+     * @param fsa: The FSA to be pruned
+     * @return A: copy of the FSA that has been pruned
      */
     private FSA pruneFSA(FSA fsa) {
         return FSA.prune(fsa);
@@ -276,9 +276,9 @@ public class LexaardInterpreter {
 
     /**
      * Check if the given FSA's are equivalent, as described in Theorem 4.5
-     * @param fsa1 The first FSA
-     * @param fsa2 The second FSA
-     * @return True if the two FSA's are equivalent, false otherwise
+     * @param fsa1: The first FSA
+     * @param fsa2: The second FSA
+     * @return True: if the two FSA's are equivalent, false otherwise
      */
     private boolean fsaEquivP(FSA fsa1, FSA fsa2) {
         return FSA.equivP(fsa1, fsa2);

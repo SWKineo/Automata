@@ -22,10 +22,10 @@ public class DFA extends FSA {
     /**
      * Process a raw line of input and add a new state, along with its
      * transitions, to the DFA.
-     * @param rawState A state followed by a list of transitions, lined
+     * @param rawState: A state followed by a list of transitions, lined
      *                 up with the order the characters from the alphabet
      *                 were defined
-     * @return True if the addition was a success, False if it wasn't (for
+     * @return True: if the addition was a success, False if it wasn't (for
      *                  instance if the  current automaton is a DFA but the
      *                  input is destined for an NFA)
      */
@@ -55,8 +55,8 @@ public class DFA extends FSA {
 
     /**
      * Run the FSA on the given string
-     * @param str A string made up of characters in the FSA's alphabet
-     * @return "accept" if the FSA reaches an accept state after
+     * @param str: A string made up of characters in the FSA's alphabet
+     * @return "accept": if the FSA reaches an accept state after
      *          reading in whole string, or "reject" if the FSA does not.
      *          Running the FSA on a string containing characters outside
      *          of the alphabet automatically returns "reject".
@@ -81,7 +81,7 @@ public class DFA extends FSA {
 
     /**
      * Format the DFA in the style described in Homework 2, Question 4.
-     * @return A formatted multiline String describing the DFA
+     * @return A: formatted multiline String describing the DFA
      */
     @Override
     public String toString() {
@@ -112,9 +112,9 @@ public class DFA extends FSA {
 
     /**
      * The transition function for this DFA.
-     * @param q The state, a member of states.keySet()
-     * @param s The input letter, a member of alphabet
-     * @return The state determined by the transition function, equivalent to
+     * @param q: The state, a member of states.keySet()
+     * @param s: The input letter, a member of alphabet
+     * @return The: state determined by the transition function, equivalent to
      *             G(q: Q, a: S)
      */
     protected String delta(String q, String s) {
@@ -129,9 +129,9 @@ public class DFA extends FSA {
      * If the transition function is not yet defined for the given state or the
      * given character, this method will initialize the necessary fields.
      *
-     * @param q The state, a member of states.keySet()
-     * @param s The input letter, a member of alphabet
-     * @param value The desired transition state
+     * @param q: The state, a member of states.keySet()
+     * @param s: The input letter, a member of alphabet
+     * @param value: The desired transition state
      */
     protected void setDelta(String q, String s, String value) {
         transitions.put(new Pair<>(q, s), value);
@@ -140,19 +140,19 @@ public class DFA extends FSA {
     /**
      * Generate the union of two DFA's as described in the proof for Theorem
      * 1.25
-     * @param d1 The first DFA in the union, of the form
+     * @param d1: The first DFA in the union, of the form
      *            States:           Q_1
      *            Alphabet:         S_1
      *            Transitions:      G_1
      *            Start State:      q_1
      *            Accept States:    F_1
-     * @param d2 The second DFA in the union, of the form
+     * @param d2: The second DFA in the union, of the form
      *            States:           Q_2
      *            Alphabet:         S_2
      *            Transitions:      G_2
      *            Start State:      q_2
      *            Accept States:    F_2
-     * @return The union of the two DFA's, a DFA with the form
+     * @return The: union of the two DFA's, a DFA with the form
      *            States:           Q = Q_1 X Q_2
      *            Alphabet:         S = S_1 U S_2
      *            Transitions:      G((r_1: Q_1, r_2: Q_2), a: S) ->
@@ -215,13 +215,13 @@ public class DFA extends FSA {
     /**
      * Converts the given DFA to an NFA, programmatically
      * (this is a trivial helper method used for processing input)
-     * @param d The DFA to be converted to an NFA, of the form
+     * @param d: The DFA to be converted to an NFA, of the form
      *            States:           Q
      *            Alphabet:         S
      *            Transitions:      G
      *            Start State:      q0
      *            Accept States:    F
-     * @return The NFA generated from the given DFA, with the form
+     * @return The: NFA generated from the given DFA, with the form
      *            States:           Q
      *            Alphabet:         S
      *            Transitions:      G'(q: Q, a: S_e) -> {
