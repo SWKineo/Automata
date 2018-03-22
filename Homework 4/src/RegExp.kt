@@ -14,13 +14,13 @@ class RegExp(expression: String) {
     private var exp: Char? = null
 
     // The list of subexpressions, if this is a regular expression operation
-    private var innerExpressions: List<RegExp>? = null
+    private var subExpressions: List<RegExp>? = null
 
     // The operation type of the outer regular expression
     private lateinit var operation: Operator
 
     private enum class Operator {
-        CHAR, EMPTY, NULL, UNION, CONCAT, STAR, ERROR
+        CHAR, EMPTY, NULL, UNION, CONCAT, STAR, EPSILON, ERROR
     }
 
     /**
@@ -104,7 +104,7 @@ class RegExp(expression: String) {
                         val token = if (tokens[open + 1] == '.' ||
                                 tokens[open + 1] == '/') {
                             // The subexpression is EMPTY or NULL
-                            tokens.subSequence(open, open + 2) as String
+                            tokens.substring(open, open + 2)
                         } else {
                             // The subexpression is a CHAR
                             tokens[open].toString()
@@ -136,7 +136,7 @@ class RegExp(expression: String) {
             }
         }
 
-        innerExpressions = inner.toList()
+        subExpressions = inner.toList()
     }
 
     /* Parsing the regular expression from text */
@@ -150,47 +150,70 @@ class RegExp(expression: String) {
     }
 
     /**
-     * Check the string against the concatenation of the inner expressions
+     * Check the string against the concatenation of the subexpressions.
+     *
+     * Uses a reluctant search for the sake of simplicity.
+     * A more thorough concat run would try a greedy and a reluctant search
+     * for each subexpression
      */
     private fun runConcat(s: String): Boolean {
-        /*
-         * To handle complex subexpressions, we will use a reluctant
-         * search to check the string in substrings to find a match
-         * for each token.
-         *
-         * We will use a counter 'start' to designate the start of the
-         * substring, and a counter 'end' to designate the end of the
-         * substring, exclusive.
-         */
-        var start = 0
-        var end = 0
-        // Loop over all but the last inner expression
-        for (i in 0 until innerExpressions!!.size - 1) {
-            val sub = innerExpressions!![i]
-            // Expand the substring until the expression matches
-            while (!sub.runOn(s.substring(start, end))) {
-                // Increment the end of the substring and check for overflow
-                if (++end == s.length) {
-                    // We've reached the end of the string and haven't found
-                    // a match
-                    return false
-                }
-            }
-            /* Start reading in a new substring
-             * Since 'end' is exclusive, start = end means we start looking
-             * right after the last character in our previous substring, and
-             * our first check is against an empty substring.
-             */
-            start = end
+        // Copy our string to a mutable so it can be reassigned across loop
+        // iterations, and nullable for compatibility with runConsume(..)
+        var sTemp: String? = s
+
+        // Loop over the subexpressions until the last one
+        for (sub in 0 until subExpressions!!.lastIndex) {
+            // Try matching the subexpression against the remainder and
+            // consume the match if it exists
+            sTemp = subExpressions!![sub].runConsume(sTemp!!)
+            // If the match failed, the concatenated match fails
+            if (sTemp == null)
+                return false
         }
-        // Now we've either found a match to all but the last expression or
-        // we've already returned, so the last expression has to match the
-        // rest of the string.
-        return innerExpressions!!.last().runOn(s.substring(start))
+
+        // Try to match the rest of the String against the last subexpression
+        return subExpressions!!.last().runOn(sTemp!!)
     }
 
+//        private fun runConcat(s: String): Boolean {
+//        /*
+//         * To handle complex subexpressions, we will use a reluctant
+//         * search to check the string in substrings to find a match
+//         * for each token.
+//         *
+//         * We will use a counter 'start' to designate the start of the
+//         * substring, and a counter 'end' to designate the end of the
+//         * substring, exclusive.
+//         */
+//        var start = 0
+//        var end = 0
+//        // Loop over all but the last subexpression
+//        for (i in 0 until subExpressions!!.size - 1) {
+//            val sub = subExpressions!![i]
+//            // Expand the substring until the expression matches
+//            while (!sub.runOn(s.substring(start, end))) {
+//                // Increment the end of the substring and check for overflow
+//                if (++end == s.length) {
+//                    // We've reached the end of the string and haven't found
+//                    // a match
+//                    return false
+//                }
+//            }
+//            /* Start reading in a new substring
+//             * Since 'end' is exclusive, start = end means we start looking
+//             * right after the last character in our previous substring, and
+//             * our first check is against an empty substring.
+//             */
+//            start = end
+//        }
+//        // Now we've either found a match to all but the last expression or
+//        // we've already returned, so the last expression has to match the
+//        // rest of the string.
+//        return subExpressions!!.last().runOn(s.substring(start))
+//    }
+
     /**
-     * Check the string against the star of the inner expressions
+     * Check the string against the star of the subexpressions
      */
     private fun runStar(s: String): Boolean {
         println("Regular expression star isn't implemented yet!")
@@ -205,13 +228,14 @@ class RegExp(expression: String) {
     fun runOn(s: String): Boolean {
         return when (operation) {
             Operator.ERROR -> false
+            Operator.EPSILON -> true
             Operator.CHAR -> s[0] == exp
             Operator.EMPTY -> s.isEmpty()
             Operator.NULL -> false
             Operator.UNION -> {
                 // Accept if any of the subexpressions accepts
                 var accepted = false
-                for (sub in innerExpressions!!) {
+                for (sub in subExpressions!!) {
                     if (sub.runOn(s)) {
                         accepted = true
                     }
@@ -224,12 +248,41 @@ class RegExp(expression: String) {
     }
 
     /**
-     * Convert the inner expressions to one continuous string
+     * Run the regular expression reluctantly on the given String and return
+     * the remainder.
+     *
+     * @param s: The String to match against
+     * @return: The remainder of the String after the first match if one is
+     * found, otherwise null
      */
-    private fun innerExpsToString(): String {
+    fun runConsume(s: String): String? {
+        // Try each substring length from 0 up to the length of the String
+        for (l in 0..s.length) {
+            // Test for a match against the first l characters of the String
+            if (runOn(s.substring(0, l))) {
+                return if (l < s.length) {
+                    // If there are any characters left, return them
+                    s.substring(l)
+                } else {
+                    // Otherwise return the empty string.
+                    ""
+                    // substring(0, l) doesn't include the last
+                    // character when l == s.length - 1 and substring(l)
+                    // would give an out of bounds exception when l == s.length.
+                }
+            }
+        }
+
+        return null
+    }
+
+    /**
+     * Convert the subexpressions to one continuous string
+     */
+    private fun subExpressionsString(): String {
         val builder = StringBuilder()
 
-        for (sub in innerExpressions!!) {
+        for (sub in subExpressions!!) {
             builder.append(" ")
             builder.append(sub.toString())
             builder.append("")
@@ -244,12 +297,13 @@ class RegExp(expression: String) {
     override fun toString(): String {
         return when (operation) {
             Operator.ERROR -> "Invalid Regular Expression"
+            Operator.EPSILON -> FSA.EPSILON
             Operator.CHAR -> exp.toString()
             Operator.EMPTY -> "r."
             Operator.NULL -> "r/"
-            Operator.UNION ->  "(r|" + innerExpsToString() + " )"
-            Operator.CONCAT -> "(r." + innerExpsToString() + " )"
-            Operator.STAR -> "(r*" + innerExpsToString() + ")"
+            Operator.UNION ->  "(r|" + subExpressionsString() + " )"
+            Operator.CONCAT -> "(r." + subExpressionsString() + " )"
+            Operator.STAR -> "(r*" + subExpressionsString() + ")"
         }
     }
 
