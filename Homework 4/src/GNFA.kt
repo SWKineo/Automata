@@ -15,7 +15,7 @@ fun main(args: Array<String>) {
 class GNFA(private val name: String,
            private val alphabet: Set<Char>,
            private val states: List<String>,
-           private val transitions: HashMap<Pair<String, String>, RegExp?>,
+           private val transitions: HashMap<Pair<String, String>, RegExpr?>,
            private val startState: String,
            private val acceptState: String) {
 
@@ -207,7 +207,7 @@ class GNFA(private val name: String,
             val gAccept = gStates.last()
 
             /** Parse the transition table */
-            val gTransitions = HashMap<Pair<String, String>, RegExp?>()
+            val gTransitions = HashMap<Pair<String, String>, RegExpr?>()
             /* Split the table into rows using a regular expression to isolate
              * the state name as rowMatches[..].groupValues[0] and the rest of
              * the line as rowMatches[..].groupValues[1].
@@ -228,7 +228,7 @@ class GNFA(private val name: String,
                     val regex = if (exp == "..") {
                         null
                     } else {
-                        RegExp(exp)
+                        RegExpr.regexFrom(exp)
                     }
 
                     gTransitions.put(
@@ -255,7 +255,8 @@ class GNFA(private val name: String,
          * recursion, so there's no convenient way to match parentheses inside
          * expressions.
          */
-        private fun splitExpressions(row: String, alphabet: Set<Char>): List<String> {
+        private fun splitExpressions(row: String,
+                                     alphabet: Set<Char>): List<String> {
             val expressions = mutableListOf<String>()
 
             // Loop until the second to last character since we check row[i + 1]

@@ -8,146 +8,15 @@ import kotlin.text.Regex
  * This meets problems 1 and 4 on COS 451, Homework 4.
  */
 
-class RegExp(expression: String) {
+class RegExpr(private val exp: Char?,
+              private val subExpressions: List<RegExpr>? = null,
+              private val operation: Operator) {
 
-    // The internal expression, if this is a simple regular expression
-    private var exp: Char? = null
-
-    // The list of subexpressions, if this is a regular expression operation
-    private var subExpressions: List<RegExp>? = null
-
-    // The operation type of the outer regular expression
-    private lateinit var operation: Operator
-
-    private enum class Operator {
+    enum class Operator {
         CHAR, EMPTY, NULL, UNION, CONCAT, STAR, EPSILON, ERROR
     }
 
-    /**
-     * Parse a simple regular expression (c, r., r/)
-     */
-    private fun initSimple(expression: String) {
-        // We just need to assign the right operation and we're done
-        if (matchCharacter.matches(expression)) {
-            // Regex is a single character
-            operation = Operator.CHAR
-            exp = expression[0]
-        } else if (expression == "r.") {
-            // Regex is an empty string
-            operation = Operator.EMPTY
-        } else if (expression == "r/") {
-            // Regex is empty
-            operation = Operator.NULL
-        }
-    }
 
-    /**
-     * Parse a complex regular expression (union, concat, star)
-     */
-    private fun initComplex(expression: String) {
-        // Strip the parentheses, store the operation in group 1, and
-        // store the string of inner subexpressions in group 2.
-        val matched = matchExpression.find(expression)
-
-        if (matched?.groupValues == null) {
-            println("Invalid Regular Expression")
-            operation = Operator.ERROR
-        } else {
-            // Set the operation (we read in the inner expressions the
-            // same way for all of the operations)
-            operation = when (matched.groupValues[0]) {
-                "|" -> Operator.UNION
-                "." -> Operator.CONCAT
-                "*" -> Operator.STAR
-                else -> {
-                    println("Invalid Regular Expression")
-                    Operator.ERROR
-                }
-            }
-
-            // Grab the inner expressions
-            parseSubexpressions(matched.groupValues[1].trim())
-        }
-    }
-
-    private fun parseSubexpressions(tokens: String) {
-        // Create a mutable set while reading in the subexpressions
-        val inner = mutableListOf<RegExp>()
-
-        // The location of the start of each token
-        var open = 0
-        // The location of the end of each token
-        var close = 0
-        // The depth of inner expressions
-        // For a token (r. 3 (r| 5 ) )
-        // '3' would have depth 1, '5' would have depth 2
-        var depth = 0
-
-        // Loop over the inner expressions to split them into tokens
-        // (regular expressions to be parsed)
-        while (close < tokens.length && open < tokens.length) {
-            if (depth == 0) {
-                // Not inside a token
-                when (tokens[open]) {
-                    ' ' -> {
-                        // Whitespace between tokens, move on
-                        open++
-                    }
-                    '(' -> {
-                        // Entering a new subexpression token
-                        depth = 1
-                        close = open + 1
-                    }
-                    else -> {
-                        // The subexpression is a CHAR, EMPTY, or NULL
-
-                        val token = if (tokens[open + 1] == '.' ||
-                                tokens[open + 1] == '/') {
-                            // The subexpression is EMPTY or NULL
-                            tokens.substring(open, open + 2)
-                        } else {
-                            // The subexpression is a CHAR
-                            tokens[open].toString()
-                        }
-
-                        inner.add(RegExp(token))
-                        open++
-                    }
-                }
-            } else {
-                // Inside a token
-                if (tokens[close] == '(') {
-                    // Increase depth
-                    depth++
-                } else if (tokens[close] == ')'){
-                    // Decrease depth
-                    depth--
-
-                    if (depth == 0) {
-                        // We have reached the end of the token
-                        inner.add(RegExp(tokens
-                                .substring(open, close + 1)))
-                        // Start looking for the next token
-                        open = close + 1
-                    }
-                }
-                // Move on to the next character
-                close++
-            }
-        }
-
-        subExpressions = inner.toList()
-    }
-
-    /* Parsing the regular expression from text */
-    init {
-        if (expression[0] != '(') {
-            // This regex is a CHAR, EMPTY, or NULL
-            initSimple(expression)
-        } else {
-            initComplex(expression)
-        }
-    }
 
     /**
      * Check the string against the concatenation of the subexpressions.
@@ -165,14 +34,14 @@ class RegExp(expression: String) {
         for (sub in 0 until subExpressions!!.lastIndex) {
             // Try matching the subexpression against the remainder and
             // consume the match if it exists
-            sTemp = subExpressions!![sub].runConsume(sTemp!!)
+            sTemp = subExpressions[sub].runConsume(sTemp!!)
             // If the match failed, the concatenated match fails
             if (sTemp == null)
                 return false
         }
 
         // Try to match the rest of the String against the last subexpression
-        return subExpressions!!.last().runOn(sTemp!!)
+        return subExpressions.last().runOn(sTemp!!)
     }
 
 //        private fun runConcat(s: String): Boolean {
@@ -309,11 +178,143 @@ class RegExp(expression: String) {
 
     /**
      * Store the intermediate parsing expressions in a companion object so
-     * they can be initialized for the RegExp class, rather than each RegExp
+     * they can be initialized for the RegExpr class, rather than each RegExpr
      * instance.
      */
     companion object {
         private val matchCharacter = Regex("\\w")
-        private val matchExpression = Regex("\\(\\s*r([|.*])([\\w\\s()]*)\\)")
+        private val matchExpression =
+                Regex("\\(\\s*r([|.*])([\\w\\s()]*)\\)")
+
+        /**
+         * Builder to produce regular expressions from text
+         */
+        fun regexFrom(raw: String): RegExpr {
+            if (raw[0] != '(') {
+                // This regex is a CHAR, EMPTY, or NULL
+                return initSimple(raw)
+            } else {
+                return initComplex(raw)
+            }
+        }
+
+        /**
+         * Parse a simple regular expression (c, r., r/)
+         */
+        private fun initSimple(expression: String): RegExpr {
+            // We just need to assign the right operation and we're done
+            return if (matchCharacter.matches(expression)) {
+                // Regex is a single character
+                RegExpr(expression[0], null, Operator.CHAR)
+            } else if (expression == "r.") {
+                // Regex is an empty string
+                RegExpr(null, null, Operator.EMPTY)
+            } else if (expression == "r/") {
+                // Regex is empty
+                RegExpr(null, null, Operator.NULL)
+            } else {
+                RegExpr(null, null, Operator.ERROR)
+            }
+        }
+
+        /**
+         * Parse a complex regular expression (union, concat, star)
+         */
+        private fun initComplex(expression: String): RegExpr {
+            // Strip the parentheses, store the operation in group 1, and
+            // store the string of inner subexpressions in group 2.
+            val matched = matchExpression.find(expression)
+            if (matched?.groupValues == null) {
+                println("Invalid Regular Expression")
+                return RegExpr(null, null, Operator.ERROR)
+            }
+
+            // Set the operation (we read in the inner expressions the
+            // same way for all of the operations)
+            val operation = when (matched.groupValues[0]) {
+                "|" -> Operator.UNION
+                "." -> Operator.CONCAT
+                "*" -> Operator.STAR
+                else -> {
+                    println("Invalid Regular Expression")
+                    Operator.ERROR
+                }
+            }
+
+            // Grab the inner expressions
+            val subExpressions =
+                    parseSubexpressions(matched.groupValues[1].trim())
+
+            return RegExpr(null, subExpressions, operation)
+        }
+
+        private fun parseSubexpressions(tokens: String): List<RegExpr> {
+            // Create a mutable set while reading in the subexpressions
+            val inner = mutableListOf<RegExpr>()
+
+            // The location of the start of each token
+            var open = 0
+            // The location of the end of each token
+            var close = 0
+            // The depth of inner expressions
+            // For a token (r. 3 (r| 5 ) )
+            // '3' would have depth 1, '5' would have depth 2
+            var depth = 0
+
+            // Loop over the inner expressions to split them into tokens
+            // (regular expressions to be parsed)
+            while (close < tokens.length && open < tokens.length) {
+                if (depth == 0) {
+                    // Not inside a token
+                    when (tokens[open]) {
+                        ' ' -> {
+                            // Whitespace between tokens, move on
+                            open++
+                        }
+                        '(' -> {
+                            // Entering a new subexpression token
+                            depth = 1
+                            close = open + 1
+                        }
+                        else -> {
+                            // The subexpression is a CHAR, EMPTY, or NULL
+
+                            val token = if (tokens[open + 1] == '.' ||
+                                    tokens[open + 1] == '/') {
+                                // The subexpression is EMPTY or NULL
+                                tokens.substring(open, open + 2)
+                            } else {
+                                // The subexpression is a CHAR
+                                tokens[open].toString()
+                            }
+
+                            inner.add(regexFrom(token))
+                            open++
+                        }
+                    }
+                } else {
+                    // Inside a token
+                    if (tokens[close] == '(') {
+                        // Increase depth
+                        depth++
+                    } else if (tokens[close] == ')'){
+                        // Decrease depth
+                        depth--
+
+                        if (depth == 0) {
+                            // We have reached the end of the token
+                            inner.add(regexFrom(tokens
+                                    .substring(open, close + 1)))
+                            // Start looking for the next token
+                            open = close + 1
+                        }
+                    }
+                    // Move on to the next character
+                    close++
+                }
+            }
+
+            return inner.toList()
+        }
     }
 }
