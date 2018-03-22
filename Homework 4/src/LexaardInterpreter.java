@@ -19,6 +19,8 @@ public class LexaardInterpreter {
     // The registered objects of the interpreter
     private HashMap<String, String> registeredStrings;
     private HashMap<String, FSA> registeredAutoma;
+    private HashMap<String, RegExpr> registeredExpressions;
+    private HashMap<String, GNFA> registeredGnfas;
     private Scanner input;
     private Flag signal;
 
@@ -150,12 +152,12 @@ public class LexaardInterpreter {
             // Read in the lines of states
             String nextLine = input.nextLine().trim();
             while (!nextLine.equals("")) {
-                if (!newAutomaton.addState(nextLine)
+                if (!newAutomaton.addStateRaw(nextLine)
                         && newAutomaton instanceof DFA) {
                     // If the add fails, the DFA needs to be converted to an NFA
                     newAutomaton = DFA.convertToNFA((DFA) newAutomaton);
                     // Try again with the converted automaton
-                    newAutomaton.addState(nextLine);
+                    newAutomaton.addStateRaw(nextLine);
                 }
                 nextLine = input.nextLine().trim();
             }

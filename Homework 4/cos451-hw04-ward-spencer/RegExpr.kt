@@ -85,12 +85,6 @@ class RegExpr(val exp: Char?,
      * Check the string against the star of the subexpression
      */
     private fun runStar(s: String): Boolean {
-        /**
-         * This hasn't been implemented yet, but an implementation would
-         * involve splitting the string into 0, 1, 2, ..., s.length
-         * substrings, and checking each of these substrings against this
-         * regex.
-         */
         println("Regular expression star isn't implemented yet!")
         return false
     }

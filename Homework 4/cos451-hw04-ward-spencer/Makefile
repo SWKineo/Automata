@@ -46,6 +46,7 @@ all:
 	@javadoc -d $(docdir) -linksource $(sourcelist)
     
         # Create a convenient script to run test classes
+    @echo "kotlinc *"
 	@echo "java -cp" $(CLASSPATH) "LexaardInterpreter" > lexaard
 	@chmod +x lexaard
 

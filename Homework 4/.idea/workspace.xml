@@ -2,8 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a2fd58e7-2194-4e2a-a521-6e65ee09d18e" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/RegExp.kt" afterPath="$PROJECT_DIR$/src/RegExpr.kt" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cos451-hw03-ward-spencer/DFA.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cos451-hw03-ward-spencer/FSA.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cos451-hw03-ward-spencer/LexaardInterpreter.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cos451-hw03-ward-spencer/Makefile" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cos451-hw03-ward-spencer/NFA.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cos451-hw03-ward-spencer/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/cos451-hw03-ward-spencer/cos451-hw03-ward-spencer.jar" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DFA.java" afterPath="$PROJECT_DIR$/src/DFA.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/FSA.java" afterPath="$PROJECT_DIR$/src/FSA.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GNFA.kt" afterPath="$PROJECT_DIR$/src/GNFA.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/LexaardInterpreter.java" afterPath="$PROJECT_DIR$/src/LexaardInterpreter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/NFA.java" afterPath="$PROJECT_DIR$/src/NFA.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/RegExpr.kt" afterPath="$PROJECT_DIR$/src/RegExpr.kt" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,8 +33,8 @@
       <file leaf-file-name="DFA.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DFA.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="24" column="23" lean-forward="false" selection-start-line="24" selection-start-column="23" selection-end-line="24" selection-end-column="23" />
+            <state relative-caret-position="432">
+              <caret line="29" column="53" lean-forward="false" selection-start-line="29" selection-start-column="53" selection-end-line="29" selection-end-column="53" />
               <folding />
             </state>
           </provider>
@@ -31,8 +43,8 @@
       <file leaf-file-name="FSA.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/FSA.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2560">
-              <caret line="11" column="53" lean-forward="true" selection-start-line="11" selection-start-column="53" selection-end-line="11" selection-end-column="53" />
+            <state relative-caret-position="16">
+              <caret line="31" column="25" lean-forward="false" selection-start-line="31" selection-start-column="19" selection-end-line="31" selection-end-column="25" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -43,14 +55,12 @@
       <file leaf-file-name="LexaardInterpreter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/LexaardInterpreter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="64">
-              <caret line="10" column="9" lean-forward="false" selection-start-line="10" selection-start-column="9" selection-end-line="10" selection-end-column="9" />
+            <state relative-caret-position="235">
+              <caret line="159" column="45" lean-forward="false" selection-start-line="159" selection-start-column="45" selection-end-line="159" selection-end-column="45" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#693#694#0" expanded="true" />
-                <element signature="e#739#740#0" expanded="true" />
-                <element signature="e#8783#8784#0" expanded="true" />
-                <element signature="e#8820#8821#0" expanded="true" />
+                <marker date="1521740119517" expanded="false" signature="8899:8910" ph=" { " />
+                <marker date="1521740119517" expanded="false" signature="8932:8938" ph=" }" />
               </folding>
             </state>
           </provider>
@@ -59,8 +69,8 @@
       <file leaf-file-name="NFA.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/NFA.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="94" column="55" lean-forward="false" selection-start-line="94" selection-start-column="55" selection-end-line="94" selection-end-column="55" />
+            <state relative-caret-position="-1600">
+              <caret line="164" column="33" lean-forward="false" selection-start-line="164" selection-start-column="33" selection-end-line="164" selection-end-column="33" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -68,21 +78,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RegExpr.kt" pinned="false" current-in-tab="true">
+      <file leaf-file-name="RegExpr.kt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/RegExpr.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1649">
-              <caret line="186" column="16" lean-forward="false" selection-start-line="186" selection-start-column="16" selection-end-line="186" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GNFA.kt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/GNFA.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="226" column="47" lean-forward="true" selection-start-line="226" selection-start-column="47" selection-end-line="226" selection-end-column="47" />
+            <state relative-caret-position="-5569">
+              <caret line="78" column="6" lean-forward="true" selection-start-line="78" selection-start-column="6" selection-end-line="79" selection-end-column="6" />
               <folding />
             </state>
           </provider>
@@ -93,6 +93,16 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="204">
               <caret line="30" column="18" lean-forward="false" selection-start-line="30" selection-start-column="18" selection-end-line="30" selection-end-column="18" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GNFA.kt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/GNFA.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="128">
+              <caret line="8" column="3" lean-forward="false" selection-start-line="8" selection-start-column="3" selection-end-line="8" selection-end-column="3" />
               <folding />
             </state>
           </provider>
@@ -111,7 +121,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>equals(</find>
       <find>return F</find>
       <find>name</find>
       <find>S</find>
@@ -140,6 +149,8 @@
       <find>append</find>
       <find>inner expression</find>
       <find>RegExp(</find>
+      <find>eps</find>
+      <find>addState(</find>
     </findStrings>
     <replaceStrings>
       <replace>signal = F</replace>
@@ -151,6 +162,7 @@
       <replace>@$1 $2:</replace>
       <replace>subexpression</replace>
       <replace>regexFrom(</replace>
+      <replace>addStateRaw(</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -170,13 +182,13 @@
         <option value="$PROJECT_DIR$/src/Regex.kt" />
         <option value="$PROJECT_DIR$/src/RegularExp.kt" />
         <option value="$PROJECT_DIR$/src/RegularExpression.kt" />
-        <option value="$PROJECT_DIR$/src/NFA.java" />
+        <option value="$PROJECT_DIR$/src/RegExp.kt" />
         <option value="$PROJECT_DIR$/src/DFA.java" />
+        <option value="$PROJECT_DIR$/src/NFA.java" />
         <option value="$PROJECT_DIR$/src/FSA.java" />
         <option value="$PROJECT_DIR$/src/LexaardInterpreter.java" />
-        <option value="$PROJECT_DIR$/src/RegExp.kt" />
-        <option value="$PROJECT_DIR$/src/RegExpr.kt" />
         <option value="$PROJECT_DIR$/src/GNFA.kt" />
+        <option value="$PROJECT_DIR$/src/RegExpr.kt" />
       </list>
     </option>
   </component>
@@ -186,9 +198,8 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="43" />
-    <option name="y" value="221" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="5" />
     <option name="width" value="1918" />
     <option name="height" value="993" />
   </component>
@@ -294,7 +305,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/Programming/COS 451/Homework 2/src/NFA.java" />
+    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/Programming/COS 451/Homework 4/src/NFA.java" />
     <property name="js.eslint.eslintPackage" value="" />
   </component>
   <component name="RunDashboard">
@@ -752,15 +763,15 @@
       <workItem from="1521676076561" duration="720000" />
       <workItem from="1521676832177" duration="2356000" />
       <workItem from="1521679451929" duration="3029000" />
-      <workItem from="1521697202293" duration="11341000" />
+      <workItem from="1521697202293" duration="23669000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="95176000" />
+    <option name="totallyTimeSpent" value="107504000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -808,14 +819,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/GNFA.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/DFA.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="336">
@@ -852,10 +855,8 @@
           <caret line="124" column="48" lean-forward="false" selection-start-line="124" selection-start-column="48" selection-end-line="124" selection-end-column="48" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#693#694#0" expanded="true" />
-            <element signature="e#739#740#0" expanded="true" />
-            <element signature="e#8783#8784#0" expanded="true" />
-            <element signature="e#8820#8821#0" expanded="true" />
+            <marker date="1521740119517" expanded="false" signature="8899:8910" ph=" { " />
+            <marker date="1521740119517" expanded="false" signature="8932:8938" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -934,10 +935,8 @@
           <caret line="162" column="57" lean-forward="false" selection-start-line="162" selection-start-column="57" selection-end-line="162" selection-end-column="57" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#693#694#0" expanded="true" />
-            <element signature="e#739#740#0" expanded="true" />
-            <element signature="e#8783#8784#0" expanded="true" />
-            <element signature="e#8820#8821#0" expanded="true" />
+            <marker date="1521740119517" expanded="false" signature="8899:8910" ph=" { " />
+            <marker date="1521740119517" expanded="false" signature="8932:8938" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -976,10 +975,8 @@
           <caret line="162" column="57" lean-forward="false" selection-start-line="162" selection-start-column="57" selection-end-line="162" selection-end-column="57" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#693#694#0" expanded="true" />
-            <element signature="e#739#740#0" expanded="true" />
-            <element signature="e#8783#8784#0" expanded="true" />
-            <element signature="e#8820#8821#0" expanded="true" />
+            <marker date="1521740119517" expanded="false" signature="8899:8910" ph=" { " />
+            <marker date="1521740119517" expanded="false" signature="8932:8938" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -1018,10 +1015,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#693#694#0" expanded="true" />
-            <element signature="e#739#740#0" expanded="true" />
-            <element signature="e#8783#8784#0" expanded="true" />
-            <element signature="e#8820#8821#0" expanded="true" />
+            <marker date="1521740119517" expanded="false" signature="8899:8910" ph=" { " />
+            <marker date="1521740119517" expanded="false" signature="8932:8938" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -1032,10 +1027,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#693#694#0" expanded="true" />
-            <element signature="e#739#740#0" expanded="true" />
-            <element signature="e#8783#8784#0" expanded="true" />
-            <element signature="e#8820#8821#0" expanded="true" />
+            <marker date="1521740119517" expanded="false" signature="8899:8910" ph=" { " />
+            <marker date="1521740119517" expanded="false" signature="8932:8938" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -1069,20 +1062,6 @@
       </provider>
     </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_144/src.zip!/java/lang/String.java" />
-    <entry file="file://$PROJECT_DIR$/src/LexaardInterpreter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="64">
-          <caret line="10" column="9" lean-forward="false" selection-start-line="10" selection-start-column="9" selection-end-line="10" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#693#694#0" expanded="true" />
-            <element signature="e#739#740#0" expanded="true" />
-            <element signature="e#8783#8784#0" expanded="true" />
-            <element signature="e#8820#8821#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/lib/kotlin-stdlib-sources.jar!/kotlin/text/regex/MatchResult.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
@@ -1094,6 +1073,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
           <caret line="190" column="15" lean-forward="false" selection-start-line="190" selection-start-column="15" selection-end-line="190" selection-end-column="15" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1130,44 +1110,64 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DFA.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="24" column="23" lean-forward="false" selection-start-line="24" selection-start-column="23" selection-end-line="24" selection-end-column="23" />
+        <state relative-caret-position="432">
+          <caret line="29" column="53" lean-forward="false" selection-start-line="29" selection-start-column="53" selection-end-line="29" selection-end-column="53" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/NFA.java">
+    <entry file="jar://$PROJECT_DIR$/lib/kotlin-stdlib-sources.jar!/kotlin/collections/TypeAliases.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="94" column="55" lean-forward="false" selection-start-line="94" selection-start-column="55" selection-end-line="94" selection-end-column="55" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="144">
+          <caret line="9" column="37" lean-forward="false" selection-start-line="9" selection-start-column="37" selection-end-line="9" selection-end-column="37" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/FSA.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2560">
-          <caret line="11" column="53" lean-forward="true" selection-start-line="11" selection-start-column="53" selection-end-line="11" selection-end-column="53" />
+        <state relative-caret-position="16">
+          <caret line="31" column="25" lean-forward="false" selection-start-line="31" selection-start-column="19" selection-end-line="31" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/GNFA.kt">
+    <entry file="file://$PROJECT_DIR$/src/LexaardInterpreter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="226" column="47" lean-forward="true" selection-start-line="226" selection-start-column="47" selection-end-line="226" selection-end-column="47" />
-          <folding />
+        <state relative-caret-position="235">
+          <caret line="159" column="45" lean-forward="false" selection-start-line="159" selection-start-column="45" selection-end-line="159" selection-end-column="45" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <marker date="1521740119517" expanded="false" signature="8899:8910" ph=" { " />
+            <marker date="1521740119517" expanded="false" signature="8932:8938" ph=" }" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/NFA.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1600">
+          <caret line="164" column="33" lean-forward="false" selection-start-line="164" selection-start-column="33" selection-end-line="164" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/RegExpr.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1649">
-          <caret line="186" column="16" lean-forward="false" selection-start-line="186" selection-start-column="16" selection-end-line="186" selection-end-column="16" />
+        <state relative-caret-position="-5569">
+          <caret line="78" column="6" lean-forward="true" selection-start-line="78" selection-start-column="6" selection-end-line="79" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GNFA.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="8" column="3" lean-forward="false" selection-start-line="8" selection-start-column="3" selection-end-line="8" selection-end-column="3" />
           <folding />
         </state>
       </provider>

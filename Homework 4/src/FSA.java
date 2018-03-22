@@ -98,7 +98,40 @@ public abstract class FSA {
      *                  instance if the  current automaton is a DFA but the
      *                  input is destined for an NFA)
      */
-    public abstract boolean addState(String rawState);
+    public abstract boolean addStateRaw(String rawState);
+
+    /**
+     * Add a new state to the FSA.
+     * @param state: The desired name for the state, may be overriden if the
+     *             state already exists
+     * @return The name of the state actually added to the FSA
+     */
+    public String addState(String state) {
+        // If the state already exists, find a new one that doesn't
+        if (states.contains(state)) {
+            state = "q" + getValidState();
+
+        }
+
+        // Add the valid state and return what was added
+        states.add(state);
+        return state;
+    }
+
+    /**
+     * Find a valid state that does not already exist in the FSA.
+     * @return The numerical ID of a state that does not exist in the FSA.
+     */
+    public int getValidState() {
+        int q = 0;
+        String state = "q0";
+        while (states.contains(state)) {
+            q++;
+            state = "q" + q;
+        }
+
+        return q;
+    }
 
     /*
      * Helper function for shared formatting
@@ -379,5 +412,53 @@ public abstract class FSA {
     public static boolean equivP(FSA a, FSA b) {
         // To save time, we'll convert our FSA's to NFA's
         return false;
+    }
+
+    /**
+     * Convert a regular expression into an equivalent FSA
+     * (specificially an NFA).
+     * @param reg: The regular expression to be converted
+     * @return An equivalent NFA
+     */
+    public static FSA regex2Fsa(RegExpr reg) {
+        NFA converted = new NFA("Regular Expression converted to FSA");
+        switch (reg.getOperation()) {
+            case NULL:
+                converted.startingState = "q0";
+                converted.addState("q0");
+                break;
+            case EMPTY:
+                converted.addState("q0");
+                converted.startingState = "q0";
+                converted.acceptStates.add("q0");
+                break;
+            case CHAR:
+                converted.addState("q0");
+                converted.addState("q1");
+                converted.startingState = "q0";
+                converted.acceptStates.add("q1");
+                converted.setDelta("q0", reg.getExp().toString(),
+                        Collections.singletonList("q1"));
+                break;
+            case UNION:
+                for (RegExpr expr : reg.getSubExpressions()) {
+                    NFA.union(converted, (NFA) regex2Fsa(expr));
+                }
+                return converted;
+            case CONCAT:
+                for (RegExpr expr : reg.getSubExpressions()) {
+                    NFA.concat(converted, (NFA) regex2Fsa(expr));
+                }
+                break;
+            case STAR:
+                return NFA.star(
+                        (NFA) regex2Fsa(reg.getSubExpressions().get(0)));
+            case ERROR:
+                System.out.println("Error! Failed to convert invalid regular " +
+                        "expression.");
+                return null;
+        }
+
+        return converted;
     }
 }
