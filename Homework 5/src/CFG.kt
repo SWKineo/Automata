@@ -167,9 +167,9 @@ class CFG(val name: String,
          * We initialize the Regex's in a companion object so they don't need
          * to be reinitialized for each CFG instance
          */
-        val matchRule = Regex("\\d+\\s+->\\s+(?:\\d+\\s+\\|?)+")
-        val matchVariables = Regex("(?:\\d+\\s+)+")
-        val matchTerminals = Regex("\\.\\.\\s+(?:\\d+\\s+)+")
+        val matchRule = Regex("\\w+\\s+->\\s+(?:\\w+\\s+\\|?)+")
+        val matchVariables = Regex("(?:\\w+\\s+)+")
+        val matchTerminals = Regex("\\.\\.\\s+(?:\\w+\\s+)+")
 
         /**
          * Creates a new CFG from the given raw input String.
