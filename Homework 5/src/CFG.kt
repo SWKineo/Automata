@@ -176,7 +176,7 @@ class CFG(val name: String,
          *
          * @return null if the input is badly formed
          */
-        fun cfgFrom(raw: String): CFG? {
+        fun from(raw: String): CFG? {
             // Use a scanner to tokenize input
             val rawScan = Scanner(raw.trim())
 

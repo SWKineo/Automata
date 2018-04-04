@@ -193,7 +193,7 @@ class RegExpr(val exp: Char?,
         /**
          * Builder to produce regular expressions from text
          */
-        fun regexFrom(raw: String): RegExpr {
+        fun from(raw: String): RegExpr {
             return if (raw[0] != '(') {
                 // This regex is a CHAR, EMPTY, or NULL
                 initSimple(raw)
@@ -249,7 +249,7 @@ class RegExpr(val exp: Char?,
                 for (a in dfa.alphabet) {
                     gTransitions.put(
                             Pair(state, dfa.delta(state, a)),
-                            regexFrom(a))
+                            from(a))
                 }
             }
 
@@ -425,7 +425,7 @@ class RegExpr(val exp: Char?,
                                 tokens[open].toString()
                             }
 
-                            inner.add(regexFrom(token))
+                            inner.add(from(token))
                             open++
                         }
                     }
@@ -440,7 +440,7 @@ class RegExpr(val exp: Char?,
 
                         if (depth == 0) {
                             // We have reached the end of the token
-                            inner.add(regexFrom(tokens
+                            inner.add(from(tokens
                                     .substring(open, close + 1)))
                             // Start looking for the next token
                             open = close + 1

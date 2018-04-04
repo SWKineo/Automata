@@ -136,31 +136,7 @@ public class LexaardInterpreter {
             registerString(stringMatch.group(1), stringMatch.group(2));
         } else if (fsaMatch.matches()) {
 
-            // Create a new FSA as it's being built
-            FSA newAutomaton = new DFA(input.next().trim());
-            // Advance to the next line
-            input.nextLine();
 
-            // Read in and set the alphabet for the FSA
-            int nfaFlag = newAutomaton.setAlphabet(input.nextLine().trim());
-
-            // Check if the automaton needs to be converted to an NFA
-            if (nfaFlag == 1) {
-                newAutomaton = DFA.convertToNFA((DFA) newAutomaton);
-            }
-
-            // Read in the lines of states
-            String nextLine = input.nextLine().trim();
-            while (!nextLine.equals("")) {
-                if (!newAutomaton.addStateRaw(nextLine)
-                        && newAutomaton instanceof DFA) {
-                    // If the add fails, the DFA needs to be converted to an NFA
-                    newAutomaton = DFA.convertToNFA((DFA) newAutomaton);
-                    // Try again with the converted automaton
-                    newAutomaton.addStateRaw(nextLine);
-                }
-                nextLine = input.nextLine().trim();
-            }
 
             // Register the newly created FSA
             registerFSA(fsaMatch.group(1), newAutomaton);

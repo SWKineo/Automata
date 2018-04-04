@@ -39,6 +39,42 @@ public abstract class FSA {
     protected String startingState;
 
     /**
+     * Create a new FSA from user input. May return either a DFA or an NFA,
+     * the result is decided during parsing.
+     * @param input The definition of an FSA, not including the initial label
+     *             'fsa'
+     * @return The FSA defined by the given user input
+     */
+    public static FSA from(Scanner input) {
+        // Create a new FSA as it's being built
+        FSA newAutomaton = new DFA(input.next());
+        // Advance to the next line
+        input.nextLine();
+
+        // Read in and set the alphabet for the FSA
+        int nfaFlag = newAutomaton.setAlphabet(input.nextLine().trim());
+
+        // Check if the automaton needs to be converted to an NFA
+        if (nfaFlag == 1) {
+            newAutomaton = DFA.convertToNFA((DFA) newAutomaton);
+        }
+
+        // Read in the lines of states
+        String nextLine = input.nextLine().trim();
+        while (!nextLine.equals("")) {
+            if (!newAutomaton.addStateRaw(nextLine)
+                    && newAutomaton instanceof DFA) {
+                // If the add fails, the DFA needs to be converted to an NFA
+                newAutomaton = DFA.convertToNFA((DFA) newAutomaton);
+                // Try again with the converted automaton
+                newAutomaton.addStateRaw(nextLine);
+            }
+            nextLine = input.nextLine().trim();
+        }
+
+        return newAutomaton;
+    }
+    /**
      * Create a new FSA with the given label.
      * @param label: A descriptive identifier for the automaton
      */

@@ -204,7 +204,9 @@ public class NFA extends FSA {
      *         where E(R) -> { q: Q | q can be reached from R in 0 or more
      *                               epsilon transitions}
      */
-    public static DFA convertToDFA(NFA nfa) {
+    public static DFA convertToDFA(FSA nfa) {
+        if (nfa instanceof DFA) return (DFA) nfa;
+
         DFA converted = new DFA(nfa.label);
 
 

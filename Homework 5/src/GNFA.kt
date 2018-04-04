@@ -168,7 +168,7 @@ class GNFA(val name: String,
          * @return: The GNFA described by the provided String, null if the
          * GNFA isn't properly formed
          */
-        fun gnfaFrom(raw: String): GNFA? {
+        fun from(raw: String): GNFA? {
 
             /* Find the the name, alphabet, and states in the string
              * Return if the raw string doesn't match the expected pattern
@@ -232,7 +232,7 @@ class GNFA(val name: String,
                     val regex = if (exp == "..") {
                         null
                     } else {
-                        RegExpr.regexFrom(exp)
+                        RegExpr.from(exp)
                     }
 
                     gTransitions.put(
