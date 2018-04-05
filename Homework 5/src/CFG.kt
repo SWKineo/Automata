@@ -135,9 +135,13 @@ class CFG(private val name: String,
      * Form, as described in Theorem 2.9 of the textbook.
      *
      * This is the implementation of the Lexaard function 'chomskyNF'
+     *
+     * "Oh yeah it's easy, just do this"
      */
     fun toChomskyNf(): CFG {
+        // A mutable set for updating the variables.
         val gVariables = mutableSetOf<String>()
+        gVariables.addAll(variables)
         /* Copy our original rules to a new mutable copy so we can preserve
          * the original CFG and edit the new rules on the fly */
         val mutRules = hashMapOf<String, MutableSet<List<String>?>>()
@@ -145,16 +149,13 @@ class CFG(private val name: String,
             mutRules[key] = rules[key]!!.toMutableSet()
 
         /** create a new start */
-        /* This is a little messy but this ensures the new start variable
-         * doesn't overlap an existing variable. */
-        var newStart = 'A'
-        while (newStart.toString() in variables) newStart++
-        val gStart = newStart.toString()
+        val gStart = findNewVariable(variables)
         gVariables.add(gStart)
         mutRules[gStart] = mutableSetOf<List<String>?>(listOf(start))
 
         /** trim epsilon rules */
-        // There's no elegant way to do this because the method itself is clunky
+        /* This looks absolutely awful but that's the downside of
+         * structuring our class this way. */
         do {
             // Assume no epsilon rules will be found
             var epsFound = false
@@ -199,19 +200,96 @@ class CFG(private val name: String,
             // Assume we won't find any unit rules
             var unitRules = false
             for (key in mutRules.keys) {
-                val variRules = mutRules[key]
-                // Check if the variable only has one rule
-                if (variRules!!.size == 1) {
-                    // Find the element in that rule
-                    val replaceable = variRules.first()!![0]
-                    // Check if that rule is a variable
-                    if (replaceable in variables) {
-                        // We found a unit rule
-                        unitRules = true
+                // Check the variable's rules
+                for (rule in mutRules[key]!!) {
+                    // Check if the rule has one element
+                    if (rule?.size == 1) {
+                        val replaceable = rule.first()
+                        // Check if that element is a variable
+                        if (replaceable in gVariables) {
+                            // We found a unit rule
+                            unitRules = true
+                            // Remove the unit rule
+                            mutRules[key]!!.remove(rule)
+                            // Check if 'replaceable' has any rules
+                            if (mutRules[replaceable] != null)
+                                /* Now we want to loop through the rules and
+                                 * replace 'replaceable' -> u with 'key' -> u.
+                                 */
+                                for (replacedRule in mutRules[replaceable]!!) {
+                                    mutRules[replaceable]!!.remove(replacedRule)
+                                    mutRules[key]!!.add(replacedRule)
+                                }
+                        }
                     }
+
                 }
             }
         } while (unitRules)
+
+        /** Convert long rules to the an intermediate form */
+        for (key in mutRules.keys) {
+            for (rule in mutRules[key]!!) {
+                // Find every rule with more than two elements
+                if (rule != null && rule.size > 2) {
+                    mutRules[key]!!.remove(rule)
+                    // Create references to the current and next variables
+                    var currentVar = key
+                    var nextVar = ""
+                    for (element in rule) {
+                        nextVar = findNewVariable(gVariables)
+                        gVariables.add(nextVar)
+                        // Make sure our current variable has space for rules
+                        if (mutRules[currentVar] == null)
+                            mutRules[currentVar] = mutableSetOf()
+                        mutRules[currentVar]!!.add(listOf(element, nextVar))
+                        currentVar = nextVar
+                    }
+                }
+            }
+        }
+
+        /** Fix rules with mixed terminals and variables */
+        for (key in mutRules.keys) {
+            val variRules = mutRules[key]!!
+            for (rule in variRules) {
+                // Find every rule with two elements
+                if (rule != null && rule.size == 2) {
+                    var firstElmnt = rule[0]
+                    var secondElmnt = rule[1]
+                    // Flag to signal that this rule needs to be replaced
+                    var needsReplacement = false
+                    // Check if the elements are terminals
+                    if (firstElmnt in terminals) {
+                        needsReplacement = true
+                        // Add new variable to point to this terminal
+                        val newVar = findNewVariable(gVariables)
+                        gVariables.add(newVar)
+                        mutRules[newVar] = mutableSetOf()
+                        mutRules[newVar]!!.add(listOf(firstElmnt))
+                        /* Replace the reference to the terminal with a
+                         * reference to the new variable */
+                        firstElmnt = newVar
+                    }
+                    if (secondElmnt in terminals) {
+                        needsReplacement = true
+                        // Add new variable to point to this terminal
+                        val newVar = findNewVariable(gVariables)
+                        gVariables.add(newVar)
+                        mutRules[newVar] = mutableSetOf()
+                        mutRules[newVar]!!.add(listOf(secondElmnt))
+                        /* Replace the reference to the terminal with a
+                         * reference to the new variable */
+                        secondElmnt = newVar
+                    }
+
+                    if (needsReplacement) {
+                        variRules.remove(rule)
+                        variRules.add(listOf(firstElmnt, secondElmnt))
+                    }
+                }
+            }
+        }
 
         // Convert the rules map to a non-mutable version to satisfy type checks
         val gRules = hashMapOf<String, Set<List<String>?>>()
@@ -228,16 +306,51 @@ class CFG(private val name: String,
     }
 
     /**
+     * Helper method to find a variable not in the given set
+     */
+    private fun findNewVariable(variableSet: Set<String>): String {
+        var newVar = 'A'
+        while (newVar.toString() in variableSet)
+            newVar++
+
+        return newVar.toString()
+    }
+
+    /**
      * Determines if the given String can be generated by this CFG, using the
      * method described in Theorem 4.7 of the textbook.
      *
      * This is the implementation of the Lexaard function 'cfgGen'
+     *
+     * This doesn't work.
      */
     fun checkGen(test: String): Boolean {
-        // TODO
+        // Convert this CFG into an equivalent grammar in Chomsky normal form
+        val chomsky = toChomskyNf()
+
+        if (test.length == 0) {
+            /* Since our grammar is in Chomsky normal form, the only possible
+             * way to reach an empty string is if the start state has a rule
+             * S -> eps */
+            return if (chomsky.rules[chomsky.start] == null)
+                false
+            else
+                chomsky.rules[chomsky.start]!!.contains(null)
+        }
+
+        // Else
+        // Check all derivations of length 2n - 1, where n = 'test.length'
         return false
     }
 
+    fun checkGenRec(test: String,
+                    derivation: String,
+                    derivSteps: Int,
+                    currentVar: String): Boolean {
+        if (test == derivation)
+            return true
+        return false
+    }
     /**
      * Determines if the given String can be generated by this CFG, using the
      * method described in Theorem 7.16

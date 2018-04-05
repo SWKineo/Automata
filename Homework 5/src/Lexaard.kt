@@ -238,7 +238,6 @@ class Lexaard {
                 else null
             }
 
-        /** Invalid input */
             else -> /** Check Regex matches last since they don't have an identifier */
                 if (firstToken.matches(Regex("(?:r\\.|r/|[\\w()|.*])+")))
                     // The object is a literal RegExpr
