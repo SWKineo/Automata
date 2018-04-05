@@ -14,6 +14,14 @@ import java.util.*
 
 
 fun main(args: Array<String>) {
+    println(CFG.from(
+            "G1 p102\r\n" +
+                    "A -> 0 A 1\r\n" +
+                    "A -> B | 2\r\n" +
+                    "B -> # | 3\r\n" +
+                    ".. 0 1 # 4\r\n" +
+                    "A B C\r\n"
+    ).toString())
     Lexaard().run()
 }
 
@@ -115,18 +123,15 @@ class Lexaard {
         // Read in the next token to predict the kind of object
         val firstToken = input.next()
 
-        /** Check Regex matches first since they aren't supported by 'when' */
+        /** Check registered variables first so they don't mess up the rest
+         * of the parsing */
+        if (firstToken in varRegistry.keys)
+            return varRegistry[firstToken]
         if (firstToken.matches(Regex("\".*\"")))
         // The object is a literal string
-            return input.next()
-        if (firstToken.matches(Regex("(?:r\\.|r/|[\\w()|.*])+")))
-        // The object is a literal RegExpr
-            return RegExpr.from(firstToken)
+            return firstToken
 
         return when(firstToken) {
-        /** registered variables */
-        // The object is a registered variable
-            in varRegistry.keys -> varRegistry[firstToken]
 
         /** literal objects */
         // The object is a literal boolean
@@ -234,7 +239,11 @@ class Lexaard {
             }
 
         /** Invalid input */
-            else -> null
+            else -> /** Check Regex matches last since they don't have an identifier */
+                if (firstToken.matches(Regex("(?:r\\.|r/|[\\w()|.*])+")))
+                    // The object is a literal RegExpr
+                    RegExpr.from(firstToken)
+                else null
         }
     }
 

@@ -13,7 +13,7 @@ class CFG(private val name: String,
           private val variables: Set<String>,
           private val terminals: Set<String>,
           private val start: String,
-          private val rules: HashMap<String, Set<Set<String>?>>) {
+          private val rules: HashMap<String, Set<List<String>?>>) {
 
     /**
      * Get a String representation of the stored CFG, as described in Homework 5
@@ -22,7 +22,7 @@ class CFG(private val name: String,
         val builder = StringBuilder()
 
         // Store the variables that aren't described by any rules
-        val unusedVariables = if (start !in rules.keys) {
+        val unusedVariables = if (start in rules.keys) {
             // A sorted list of the variables not described by any rules
             variables.filterNot { it in rules.keys }.sorted()
         } else {
@@ -70,7 +70,8 @@ class CFG(private val name: String,
 
         /* Append the unused variables early and set a flag if they contain
          * the start state */
-        val earlyVariables = unusedVariables[0] == start
+        val earlyVariables = unusedVariables.isNotEmpty()
+                                && unusedVariables[0] == start
         if (earlyVariables) {
             for (variable in unusedVariables) {
                 builder.append(variable)
@@ -104,6 +105,7 @@ class CFG(private val name: String,
                 // If there are more partial rules, append a separator
                 if (chunk !== rule.last()) builder.append("| ")
             }
+            builder.appendln()
         }
 
         /* If the unused variables weren't appended earlier, append them now */
@@ -135,14 +137,93 @@ class CFG(private val name: String,
      * This is the implementation of the Lexaard function 'chomskyNF'
      */
     fun toChomskyNf(): CFG {
-        
+        val gVariables = mutableSetOf<String>()
+        /* Copy our original rules to a new mutable copy so we can preserve
+         * the original CFG and edit the new rules on the fly */
+        val mutRules = hashMapOf<String, MutableSet<List<String>?>>()
+        for (key in rules.keys)
+            mutRules[key] = rules[key]!!.toMutableSet()
+
+        /** create a new start */
+        /* This is a little messy but this ensures the new start variable
+         * doesn't overlap an existing variable. */
+        var newStart = 'A'
+        while (newStart.toString() in variables) newStart++
+        val gStart = newStart.toString()
+        gVariables.add(gStart)
+        mutRules[gStart] = mutableSetOf<List<String>?>(listOf(start))
+
+        /** trim epsilon rules */
+        // There's no elegant way to do this because the method itself is clunky
+        do {
+            // Assume no epsilon rules will be found
+            var epsFound = false
+            for (key in mutRules.keys) {
+                // Check if The variable has an epsilon rule
+                if (mutRules[key]!!.contains(null)) {
+                    // Signal that we'll need to loop again
+                    epsFound = true
+                    // Remove the offending rule
+                    mutRules[key]!!.remove(null)
+                    // Find every use of the offending variable
+                    for (vari in mutRules.keys) {
+                        val variRules = mutRules[vari]!!
+                        for (rule in variRules) {
+                            // We don't want to check epsilon rules in this step
+                            if (rule != null)
+                                for (i in 0 until rule.size) {
+                                    if (rule[i] == key) {
+                                        /* For every occurrence of the offending
+                                         * variable, add a version of this
+                                         * rule with the variable removed */
+                                        var tempRule: MutableList<String>? =
+                                                mutableListOf()
+                                        tempRule!!.addAll(rule)
+                                        tempRule.removeAt(i)
+                                        /* If this was a unit rule, fill it in
+                                         * with an epsilon rule
+                                         */
+                                        if (tempRule.isEmpty())
+                                            tempRule = null
+                                        variRules.add(tempRule)
+                                    }
+                                }
+                        }
+                    }
+                }
+            }
+        } while (epsFound)
+
+        /** Trim unit rules */
+        do {
+            // Assume we won't find any unit rules
+            var unitRules = false
+            for (key in mutRules.keys) {
+                val variRules = mutRules[key]
+                // Check if the variable only has one rule
+                if (variRules!!.size == 1) {
+                    // Find the element in that rule
+                    val replaceable = variRules.first()!![0]
+                    // Check if that rule is a variable
+                    if (replaceable in variables) {
+                        // We found a unit rule
+                        unitRules = true
+                    }
+                }
+            }
+        } while (unitRules)
+
+        // Convert the rules map to a non-mutable version to satisfy type checks
+        val gRules = hashMapOf<String, Set<List<String>?>>()
+        for (key in mutRules.keys)
+            gRules[key] = mutRules[key]!!.toSet()
 
         return CFG(
                 name,
-                variables,
+                gVariables,
                 terminals,
-                start,
-                rules
+                gStart,
+                gRules
         )
     }
 
@@ -174,9 +255,9 @@ class CFG(private val name: String,
          * We initialize the Regex's in a companion object so they don't need
          * to be reinitialized for each CFG instance
          */
-        val matchRule = Regex("\\w+\\s+->\\s+(?:\\w+\\s+\\|?)+")
-        val matchVariables = Regex("(?:\\w+\\s+)+")
-        val matchTerminals = Regex("\\.\\.\\s+(?:\\w+\\s+)+")
+        val matchRule = Regex("\\w+\\s*->\\s*(?:\\S+\\s*\\|?)+")
+        val matchVariables = Regex("(?:\\w+\\s*)+")
+        val matchTerminals = Regex("\\.\\.\\s+(?:\\S+\\s*)+")
 
         /**
          * Creates a new CFG from the given raw input String.
@@ -195,7 +276,7 @@ class CFG(private val name: String,
             // Create collections to start reading in input
             val gVariables = mutableSetOf<String>()
             val gTerminals = mutableSetOf<String>()
-            val gRules = hashMapOf<String, Set<Set<String>?>>()
+            val mutRules = hashMapOf<String, MutableSet<List<String>?>>()
 
             // Create a mutable variable to hold the start state
             var gStart: String? = null
@@ -227,7 +308,7 @@ class CFG(private val name: String,
                          * this variable as the new start */
                         if (gStart == null) gStart = variable
 
-                        val results = mutableSetOf<Set<String>?>()
+                        val results = mutableSetOf<List<String>?>()
                         // Skip over the rule identifier
                         lineScan.next("->")
                         while (lineScan.hasNext()) {
@@ -237,7 +318,7 @@ class CFG(private val name: String,
                             if (lineScan.hasNext("..")) {
                                 results.add(null)
                             } else {
-                                val result = mutableSetOf<String>()
+                                val result = mutableListOf<String>()
                                 while (lineScan.hasNext() &&
                                         !lineScan.hasNext("\\|")) {
                                     val elmnt = lineScan.next()
@@ -252,22 +333,20 @@ class CFG(private val name: String,
                                         unknownElements.add(elmnt)
                                     }
 
-                                    /* If the element hasn't been registered yet, mark
-                                     * it to be checked once the whole CFG has been
-                                     * read in */
-                                    if (elmnt !in gTerminals
-                                            && elmnt !in gVariables)
-                                        unknownElements.add(elmnt)
                                 }
                                 // Skip the separator, if necessary
-                                lineScan.next("\\|")
+                                if (lineScan.hasNext("\\|"))
+                                    lineScan.next("\\|")
                                 results.add(result)
                             }
 
                         }
 
-                        // Add the newly created rule to the partial CFG
-                        gRules.put(variable, results)
+                        // Create the set of rules if it doesn't already exist
+                        if (mutRules[variable] == null)
+                            mutRules[variable] = mutableSetOf()
+                        // Add the newly created rules to the partial CFG
+                        mutRules[variable]!!.addAll(results)
 
                     }
                     line.matches(matchVariables) -> {
@@ -286,7 +365,7 @@ class CFG(private val name: String,
 
                         // Read in (the rest of) the variables
                         while (lineScan.hasNext()) {
-                            gTerminals.add(lineScan.next())
+                            gVariables.add(lineScan.next())
                         }
                     }
                     line.matches(matchTerminals) -> {
@@ -319,6 +398,14 @@ class CFG(private val name: String,
              * does not have any variables, and is therefore considered
              * badly formed. */
             if (gStart == null) return null
+
+            /*
+             * Move the rules to a non-mutable set since we don't want to change
+             * the CFG after it's been created
+             */
+            val gRules = hashMapOf<String, Set<List<String>?>>()
+            for (key in mutRules.keys)
+                gRules[key] = mutRules[key]!!.toSet()
 
             return CFG(
                     gName,
