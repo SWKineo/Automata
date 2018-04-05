@@ -61,20 +61,16 @@ public class NFA extends FSA {
     /**
      * Run the FSA on the given string
      * @param str: A string made up of characters in the FSA's alphabet
-     * @return "accept" if the FSA reaches an accept state after
-     *          reading in whole string, or "reject" if the FSA does not.
+     * @return true if the FSA reaches an accept state after
+     *          reading in whole string, or false if the FSA does not.
      *          Running the FSA on a string containing characters outside
-     *          of the alphabet automatically returns "reject".
+     *          of the alphabet automatically returns false.
      */
     @Override
-    public String runString(String str) {
+    public boolean runString(String str) {
         // Initialize the automaton with the starting state
         // Check if the string was accepted
-        if (testPath(str, startingState)) {
-            return "accept";
-        } else {
-            return "reject";
-        }
+        return testPath(str, startingState);
     }
 
     /*
@@ -204,7 +200,9 @@ public class NFA extends FSA {
      *         where E(R) -> { q: Q | q can be reached from R in 0 or more
      *                               epsilon transitions}
      */
-    public static DFA convertToDFA(NFA nfa) {
+    public static DFA convertToDFA(FSA nfa) {
+        if (nfa instanceof DFA) return (DFA) nfa;
+
         DFA converted = new DFA(nfa.label);
 
 

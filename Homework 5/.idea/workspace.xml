@@ -3,19 +3,19 @@
   <component name="ChangeListManager">
     <list default="true" id="a2fd58e7-2194-4e2a-a521-6e65ee09d18e" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cos451-hw05-ward-spencer/DFA.java" beforeDir="false" afterPath="$PROJECT_DIR$/cos451-hw05-ward-spencer/DFA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cos451-hw05-ward-spencer/FSA.java" beforeDir="false" afterPath="$PROJECT_DIR$/cos451-hw05-ward-spencer/FSA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cos451-hw05-ward-spencer/GNFA.kt" beforeDir="false" afterPath="$PROJECT_DIR$/cos451-hw05-ward-spencer/GNFA.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cos451-hw05-ward-spencer/LexaardInterpreter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cos451-hw05-ward-spencer/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/cos451-hw05-ward-spencer/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cos451-hw05-ward-spencer/NFA.java" beforeDir="false" afterPath="$PROJECT_DIR$/cos451-hw05-ward-spencer/NFA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cos451-hw05-ward-spencer/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/cos451-hw05-ward-spencer/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cos451-hw05-ward-spencer/RegExpr.kt" beforeDir="false" afterPath="$PROJECT_DIR$/cos451-hw05-ward-spencer/RegExpr.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cos451-hw05-ward-spencer/cos451-hw04-ward-spencer.jar" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Homework 2/CFG$Companion.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Homework 2/CFG$Companion.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Homework 2/CFG.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Homework 2/CFG.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Homework 2/GNFA$Companion.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Homework 2/GNFA$Companion.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Homework 2/GNFA.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Homework 2/GNFA.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Homework 2/Lexaard.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Homework 2/Lexaard.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Homework 2/LexaardKt.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Homework 2/LexaardKt.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Homework 2/META-INF/Homework 2.kotlin_module" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Homework 2/META-INF/Homework 2.kotlin_module" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Homework 2/RegExpr$Companion.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Homework 2/RegExpr$Companion.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Homework 2/RegExpr$Operator.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Homework 2/RegExpr$Operator.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Homework 2/RegExpr$WhenMappings.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Homework 2/RegExpr$WhenMappings.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Homework 2/RegExpr.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Homework 2/RegExpr.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CFG.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/CFG.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Lexaard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Lexaard.kt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -27,37 +27,6 @@
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
-  </component>
-  <component name="DockManager">
-    <window id="1">
-      <content type="file-editors">
-        <state>
-          <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-            <file leaf-file-name="Lexaard.kt" pinned="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/src/Lexaard.kt">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="1703">
-                    <caret line="245" column="9" lean-forward="true" selection-start-line="245" selection-start-column="9" selection-end-line="245" selection-end-column="9" />
-                  </state>
-                </provider>
-              </entry>
-            </file>
-            <file leaf-file-name="NFA.java" pinned="false" current-in-tab="false">
-              <entry file="file://$PROJECT_DIR$/src/NFA.java">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="936">
-                    <caret line="72" column="15" selection-start-line="72" selection-start-column="15" selection-end-line="72" selection-end-column="15" />
-                    <folding>
-                      <element signature="imports" expanded="true" />
-                    </folding>
-                  </state>
-                </provider>
-              </entry>
-            </file>
-          </leaf>
-        </state>
-      </content>
-    </window>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
@@ -91,7 +60,7 @@
       <file leaf-file-name="FSA.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/FSA.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3211">
+            <state relative-caret-position="3159">
               <caret line="247" column="59" selection-start-line="247" selection-start-column="59" selection-end-line="247" selection-end-column="59" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -103,8 +72,8 @@
       <file leaf-file-name="CFG.kt" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/CFG.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="939">
-              <caret line="324" column="25" selection-start-line="324" selection-start-column="25" selection-end-line="324" selection-end-column="25" />
+            <state relative-caret-position="391">
+              <caret line="335" column="21" lean-forward="true" selection-start-line="335" selection-start-column="21" selection-end-line="335" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -198,9 +167,9 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="100" />
-    <option name="y" value="-14" />
+    <option name="y" value="-15" />
     <option name="width" value="1920" />
     <option name="height" value="995" />
   </component>
@@ -719,15 +688,15 @@
       <workItem from="1522887112355" duration="6714000" />
       <workItem from="1522895775592" duration="8323000" />
       <workItem from="1522943742393" duration="5096000" />
+      <workItem from="1522949033278" duration="701000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="145780000" />
+    <option name="totallyTimeSpent" value="146481000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -737,7 +706,7 @@
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="right" id="Maven Projects" order="3" />
-      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32827586" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="7" />
@@ -752,10 +721,10 @@
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39979014" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Cargo" order="3" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Cargo" order="3" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
     </layout>
@@ -978,7 +947,7 @@
     <entry file="file://$PROJECT_DIR$/src/LexaardInterpreter.java" />
     <entry file="file://$PROJECT_DIR$/src/FSA.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3211">
+        <state relative-caret-position="3159">
           <caret line="247" column="59" selection-start-line="247" selection-start-column="59" selection-end-line="247" selection-end-column="59" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -988,7 +957,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/NFA.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="936">
+        <state relative-caret-position="910">
           <caret line="72" column="15" selection-start-line="72" selection-start-column="15" selection-end-line="72" selection-end-column="15" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1018,17 +987,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Lexaard.kt">
+    <entry file="file://$PROJECT_DIR$/src/CFG.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1703">
-          <caret line="245" column="9" lean-forward="true" selection-start-line="245" selection-start-column="9" selection-end-line="245" selection-end-column="9" />
+        <state relative-caret-position="391">
+          <caret line="335" column="21" lean-forward="true" selection-start-line="335" selection-start-column="21" selection-end-line="335" selection-end-column="21" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/CFG.kt">
+    <entry file="file://$PROJECT_DIR$/src/Lexaard.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="939">
-          <caret line="324" column="25" selection-start-line="324" selection-start-column="25" selection-end-line="324" selection-end-column="25" />
+        <state relative-caret-position="486">
+          <caret line="245" column="9" selection-start-line="245" selection-start-column="9" selection-end-line="245" selection-end-column="9" />
         </state>
       </provider>
     </entry>

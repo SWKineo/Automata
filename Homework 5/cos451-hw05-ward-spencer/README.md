@@ -1,34 +1,20 @@
 Spencer Ward
-March 22, 2018
-COS 451 Homework 4
+April 5, 2018
+COS 451 Homework 5
 
 Description:
 
-An implementation of the modified Lexxard interpreter described in Homework 4
+An implementation of the modified Lexxard interpreter described in Homework 5
 
 The interpreter is started by a basic main() method, and runs as an instance of the class defined in
 
-LexaardInterpreter.java.
+Lexaard.kt
 
-The interpreter uses a representation of Regular Expressions defined in the Kotlin file
+This interpreter has been greatly simplified and rewritten in Kotlin since Homework 4, so now it properly reads and processes literals, functions, and variables of most types (I haven't had a chance to go back through and clean up all of the old parsing code for each class, but they should work in theory).
 
-RegExpr.kt
-
-and a representation of GNFA's defined in the Kotlin file
-
-GNFA.kt.
-
-All of the code for parsing, printing, and running regular expressions is implemented as described in problem 1, with the exception that the code to run a star operation has not been completed (although a brief implementation is described in the comments).
-
-The code for the function regex2fsa has been implemented as described in problem 2.
-
-All of the code for parsing, printing, and running GNFA's is implemented as described in problem 3.
-
-The code for the function fsa2regex has been implemented as described in problem 4.
-
-Although these two objects and two functions are implemented and ready to use (with the exception of running the star regex operation), they have not been tied into the command line interpreter yet. Adding this functionality would be fairly straightforward, involving writing some Pattern code to recognize regular expression and GNFA objects, storing them in their respective HashMaps with their variable names, and adding Pattern based parsers for each of the functions.
-
-Regular expressions are checked using reluctant operations, although in hindsight greedy operations might have been more effective.
+Lexaard uses a model of context-free grammars given in 'CFG.kt', which allows parsing from a String using 'CFG.from(<str>)' -> <cfg>, and printing using '<cfg>.toString'.
+Conversion to Chomsky normal form using 'chomskyNF' is partially working but hasn't been debugged, so the function can be run from the interpreter but the CFGs it returns are usually not actually in CNF. 
+Checking if a CFG generates a string using 'cfgGen' is partially implemented but not fully working, so the function can be called from the interpreter but it will always return 'false'.
 
 Compilation:
 

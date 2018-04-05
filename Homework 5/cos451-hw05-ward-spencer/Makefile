@@ -47,7 +47,7 @@ all:
     
         # Create a convenient script to run test classes
     @echo "kotlinc *"
-	@echo "java -cp" $(CLASSPATH) "LexaardInterpreter" > lexaard
+	@echo "java -cp" $(CLASSPATH) "Lexaard" > lexaard
 	@chmod +x lexaard
 
 clean:
