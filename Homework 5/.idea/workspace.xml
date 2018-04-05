@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a2fd58e7-2194-4e2a-a521-6e65ee09d18e" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/../Homework 4/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Homework 4/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/kotlin-reflect.jar" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kotlin-reflect.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/kotlin-stdlib-sources.jar" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kotlin-stdlib-sources.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/kotlin-stdlib.jar" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kotlin-stdlib.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/kotlin-test.jar" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kotlin-test.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DFA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DFA.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/FSA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FSA.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Lexaard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Lexaard.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/NFA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/NFA.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RegExpr.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/RegExpr.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CFG.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/CFG.kt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -32,8 +23,8 @@
             <file leaf-file-name="Lexaard.kt" pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/src/Lexaard.kt">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="395">
-                    <caret line="101" lean-forward="true" selection-start-line="101" selection-end-line="101" />
+                  <state relative-caret-position="-892">
+                    <caret line="95" column="42" lean-forward="true" selection-start-line="95" selection-start-column="42" selection-end-line="95" selection-end-column="42" />
                   </state>
                 </provider>
               </entry>
@@ -57,7 +48,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="DFA.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DFA.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DFA.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="260">
@@ -87,23 +78,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LexaardInterpreter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/LexaardInterpreter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="137" selection-start-line="137" selection-end-line="137" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CFG.kt" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CFG.kt" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/CFG.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2314">
-              <caret line="178" column="16" selection-start-line="178" selection-start-column="16" selection-end-line="178" selection-end-column="16" />
+            <state relative-caret-position="101">
+              <caret line="137" column="8" selection-start-line="137" selection-start-column="8" selection-end-line="137" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -179,7 +158,6 @@
         <option value="$PROJECT_DIR$/src/RegularExp.kt" />
         <option value="$PROJECT_DIR$/src/RegularExpression.kt" />
         <option value="$PROJECT_DIR$/src/RegExp.kt" />
-        <option value="$PROJECT_DIR$/src/CFG.kt" />
         <option value="$PROJECT_DIR$/src/GNFA.kt" />
         <option value="$PROJECT_DIR$/src/LexaardInterpreter.java" />
         <option value="$PROJECT_DIR$/src/RegExpr.kt" />
@@ -187,6 +165,7 @@
         <option value="$PROJECT_DIR$/src/DFA.java" />
         <option value="$PROJECT_DIR$/src/NFA.java" />
         <option value="$PROJECT_DIR$/src/Lexaard.kt" />
+        <option value="$PROJECT_DIR$/src/CFG.kt" />
       </list>
     </option>
   </component>
@@ -711,12 +690,12 @@
       <workItem from="1522807786376" duration="107000" />
       <workItem from="1522807904614" duration="1187000" />
       <workItem from="1522874858515" duration="4556000" />
-      <workItem from="1522887112355" duration="4753000" />
+      <workItem from="1522887112355" duration="6714000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="130400000" />
+    <option name="totallyTimeSpent" value="132361000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
@@ -727,7 +706,7 @@
       <window_info anchor="right" id="Palette&#9;" order="5" />
       <window_info id="Image Layers" order="6" />
       <window_info anchor="right" id="Capture Analysis" order="7" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50625" side_tool="true" visible="true" weight="0.32827586" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50911456" side_tool="true" visible="true" weight="0.32827586" />
       <window_info anchor="right" id="Maven Projects" order="4" />
       <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49375" weight="0.32948583" />
@@ -735,8 +714,9 @@
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info id="Capture Tool" order="3" />
       <window_info id="Designer" order="4" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.2421875" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.2421875" />
       <window_info anchor="right" id="Database" order="6" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4908854" weight="0.32827586" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="2" weight="0.25" />
       <window_info id="UI Designer" order="5" />
@@ -751,7 +731,6 @@
       <window_info anchor="right" id="Properties" order="0" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="3" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49166667" weight="0.32843652" />
       <window_info anchor="right" id="Cargo" order="8" />
     </layout>
   </component>
@@ -997,13 +976,6 @@
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_144/src.zip!/java/util/Scanner.java" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_144/src.zip!/java/util/HashMap.java" />
     <entry file="file://$PROJECT_DIR$/Homework 5.iml" />
-    <entry file="file://$PROJECT_DIR$/src/CFG.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2314">
-          <caret line="178" column="16" selection-start-line="178" selection-start-column="16" selection-end-line="178" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/GNFA.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2210">
@@ -1032,26 +1004,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/LexaardInterpreter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="137" selection-start-line="137" selection-end-line="137" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/FSA.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="247" column="59" lean-forward="true" selection-start-line="247" selection-start-column="59" selection-end-line="247" selection-end-column="59" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/NFA.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="273">
@@ -1069,10 +1021,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/LexaardInterpreter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1264">
+          <caret line="137" selection-start-line="137" selection-end-line="137" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Lexaard.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="101" lean-forward="true" selection-start-line="101" selection-end-line="101" />
+        <state relative-caret-position="-892">
+          <caret line="95" column="42" lean-forward="true" selection-start-line="95" selection-start-column="42" selection-end-line="95" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FSA.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="247" column="59" lean-forward="true" selection-start-line="247" selection-start-column="59" selection-end-line="247" selection-end-column="59" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CFG.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="101">
+          <caret line="137" column="8" selection-start-line="137" selection-start-column="8" selection-end-line="137" selection-end-column="8" />
         </state>
       </provider>
     </entry>

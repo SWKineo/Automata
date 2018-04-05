@@ -9,11 +9,11 @@ import java.util.*
  * Raw CFGs are formatted as described in Homework 5, Question 1.
  */
 
-class CFG(val name: String,
-          val variables: Set<String>,
-          val terminals: Set<String>,
-          val start: String,
-          val rules: HashMap<String, Set<Set<String>>>) {
+class CFG(private val name: String,
+          private val variables: Set<String>,
+          private val terminals: Set<String>,
+          private val start: String,
+          private val rules: HashMap<String, Set<Set<String>?>>) {
 
     /**
      * Get a String representation of the stored CFG, as described in Homework 5
@@ -51,11 +51,12 @@ class CFG(val name: String,
         for (variable in rules.keys) {
             /* We can skip the null check since a rule without a right-hand
              * side would be considered a badly-formed line by the Regex
-             * 'matchRule', so parsing would have already failed */
-            for (rule in rules[variable]!!) {
-                for (element in rule) {
+             * 'matchRule', so parsing would have already failed. We filter out
+             * epsilon rules since epsilon isn't a terminal. */
+            for (rule in rules[variable]!!.filterNot{ it == null }) {
+                for (element in rule!!) {
                     // This won't make duplicates since `tempUsed` is a Set
-                    if (element in terminals) tempUsed.add(element)
+                    if (element in terminals) tempUsed.add(element!!)
                 }
             }
         }
@@ -90,13 +91,18 @@ class CFG(val name: String,
 
             // Append every partial rule
             for (chunk in rule) {
-                // Append the terminals and variables of the partial rule
-                for (element in chunk) {
-                    builder.append(element)
-                    builder.append(" ")
+                // Handle epsilon rules
+                if (chunk == null) {
+                    builder.append(".. ")
+                } else {
+                    // Append the terminals and variables of the partial rule
+                    for (element in chunk) {
+                        builder.append(element)
+                        builder.append(" ")
+                    }
                 }
                 // If there are more partial rules, append a separator
-                if (chunk !== rule.last()) builder.append(" | ")
+                if (chunk !== rule.last()) builder.append("| ")
             }
         }
 
@@ -129,7 +135,8 @@ class CFG(val name: String,
      * This is the implementation of the Lexaard function 'chomskyNF'
      */
     fun toChomskyNf(): CFG {
-        // TODO
+        
+
         return CFG(
                 name,
                 variables,
@@ -188,7 +195,7 @@ class CFG(val name: String,
             // Create collections to start reading in input
             val gVariables = mutableSetOf<String>()
             val gTerminals = mutableSetOf<String>()
-            val gRules = hashMapOf<String, Set<Set<String>>>()
+            val gRules = hashMapOf<String, Set<Set<String>?>>()
 
             // Create a mutable variable to hold the start state
             var gStart: String? = null
@@ -198,7 +205,7 @@ class CFG(val name: String,
              * Strings that aren't registered as variables are added as
              * terminals.
              *
-             * This distinction can't be made while parsing the rule, because
+             * This distinction can't be made while parsing each rule, because
              * not all of the variables can be assumed to have been registered.
              */
             val unknownElements = mutableSetOf<String>()
@@ -209,71 +216,91 @@ class CFG(val name: String,
                 val line = rawScan.nextLine()
                 val lineScan = Scanner(line)
 
-                if (line.matches(matchRule)) {
-                    /* The line is a rule */
+                when {
+                    line.matches(matchRule) -> {
+                        /* The line is a rule */
 
-                    // Read in the variable being described
-                    val variable = lineScan.next()
+                        // Read in the variable being described
+                        val variable = lineScan.next()
 
-                    /* If a start variable hasn't been registered yet, count
-                     * this variable as the new start */
-                    if (gStart == null) gStart = variable
+                        /* If a start variable hasn't been registered yet, count
+                         * this variable as the new start */
+                        if (gStart == null) gStart = variable
 
-                    val results = mutableSetOf<Set<String>>()
-                    // Skip over the rule identifier
-                    lineScan.next("->")
-                    while(lineScan.hasNext()) {
-                        val result = mutableSetOf<String>()
-                        // Read until the next separator or the end of the line
-                        while (lineScan.hasNext() &&
-                                !lineScan.hasNext("\\|")) {
-                            val elmnt = lineScan.next()
-                            result.add(elmnt)
+                        val results = mutableSetOf<Set<String>?>()
+                        // Skip over the rule identifier
+                        lineScan.next("->")
+                        while (lineScan.hasNext()) {
+                            /* Read until the next separator or the end of the
+                             * line */
+                            // Mark epsilon rules as null
+                            if (lineScan.hasNext("..")) {
+                                results.add(null)
+                            } else {
+                                val result = mutableSetOf<String>()
+                                while (lineScan.hasNext() &&
+                                        !lineScan.hasNext("\\|")) {
+                                    val elmnt = lineScan.next()
+                                    result.add(elmnt)
 
-                            /* If the element hasn't been registered yet, mark
-                             * it to be checked once the whole CFG has been
-                             * read in */
-                            if (elmnt !in gTerminals && elmnt !in gVariables)
-                                unknownElements.add(elmnt)
+
+                                    /* If the element hasn't been registered yet, mark
+                                     * it to be checked once the whole CFG has been
+                                     * read in */
+                                    if (elmnt !in gTerminals
+                                            && elmnt !in gVariables) {
+                                        unknownElements.add(elmnt)
+                                    }
+
+                                    /* If the element hasn't been registered yet, mark
+                                     * it to be checked once the whole CFG has been
+                                     * read in */
+                                    if (elmnt !in gTerminals
+                                            && elmnt !in gVariables)
+                                        unknownElements.add(elmnt)
+                                }
+                                // Skip the separator, if necessary
+                                lineScan.next("\\|")
+                                results.add(result)
+                            }
+
                         }
-                        // Skip the separator, if necessary
-                        lineScan.next("\\|")
-                        results.add(result)
+
+                        // Add the newly created rule to the partial CFG
+                        gRules.put(variable, results)
+
                     }
+                    line.matches(matchVariables) -> {
+                        /* The line is a variable declaration */
 
-                    // Add the newly created rule to the partial CFG
-                    gRules.put(variable, results)
+                        /* If the start variable hasn't been set yet, read in the
+                         * first variable and set it as the new start.
+                         *
+                         * The start variable is read in separately from the rest so
+                         * that this null check doesn't need to be done for every
+                         * variable. */
+                        if (gStart == null) {
+                            gStart = lineScan.next()
+                            gVariables.add(gStart)
+                        }
 
-                } else if (line.matches(matchVariables)) {
-                    /* The line is a variable declaration */
-
-                    /* If the start variable hasn't been set yet, read in the
-                     * first variable and set it as the new start.
-                     *
-                     * The start variable is read in separately from the rest so
-                     * that this null check doesn't need to be done for every
-                     * variable. */
-                    if (gStart == null) {
-                        gStart = lineScan.next()
-                        gVariables.add(gStart)
+                        // Read in (the rest of) the variables
+                        while (lineScan.hasNext()) {
+                            gTerminals.add(lineScan.next())
+                        }
                     }
+                    line.matches(matchTerminals) -> {
+                        /* The line is a terminal declaration */
 
-                    // Read in (the rest of) the variables
-                    while (lineScan.hasNext()) {
-                        gTerminals.add(lineScan.next())
+                        // Skip the terminal signal
+                        lineScan.next("..")
+                        // Read in the terminals
+                        while (lineScan.hasNext()) {
+                            gTerminals.add(lineScan.next())
+                        }
                     }
-
-                } else if (line.matches(matchTerminals)) {
-                    /* The line is a terminal declaration */
-
-                    // Skip the terminal signal
-                    lineScan.next("..")
-                    // Read in the terminals
-                    while (lineScan.hasNext()) {
-                        gTerminals.add(lineScan.next())
-                    }
-
-                } else return null /* The line is invalid */
+                    else -> return null /* The line is invalid */
+                }
             }
 
             /* Go through all of the unknown Strings encountered while parsing
