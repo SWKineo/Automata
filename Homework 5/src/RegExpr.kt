@@ -129,7 +129,7 @@ class RegExpr(val exp: Char?,
      * @return: The remainder of the String after the first match if one is
      * found, otherwise null
      */
-    fun runConsume(s: String): String? {
+    private fun runConsume(s: String): String? {
         // Try each substring length from 0 up to the length of the String
         for (l in 0..s.length) {
             // Test for a match against the first l characters of the String

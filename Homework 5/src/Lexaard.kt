@@ -19,7 +19,7 @@ fun main(args: Array<String>) {
 
 class Lexaard {
     val input = Scanner(System.`in`)
-    val objectReg = hashMapOf<String, Any>()
+    val varRegistry = hashMapOf<String, Any>()
     var running = true
 
     fun run() {
@@ -37,16 +37,74 @@ class Lexaard {
         input.close()
     }
 
+    /**
+     * Parse the object to be printed, then print it using its '.toString'
+     * method. This works because Kotlin calls the overridden method for the
+     * class in memory.
+     */
     private fun cmdPrint() {
+        // Parse the desired object
         val retrievedAny = retrieveObject()
+
+        /* Convert it to a String and print it.
+         * We don't need to output an error if the object can't be parsed or
+         * found, but we also don't want to print anything. */
+        if (retrievedAny != null)
+            println(retrievedAny.toString())
     }
 
+    /**
+     * Read in the name and parse the given object, then store the object in a
+     * HashMap with its name as the key.
+     */
     private fun cmdDefine() {
+        // Read in the name of the new variable
+        val varName = input.next()
+        // Read in the object to be stored
+        val varObject = retrieveObject()
+
+        if (varObject == null)
+            // Don't add the object if it was null (meaning it was badly formed)
+            println("That object can't be parsed!")
+        else
+            // Otherwise, add the object as a registered variable
+            varRegistry[varName] = varObject
 
     }
 
+    /**
+     * Parse the provided object and try running it on the given string, if it's
+     * runnable. Prints an error if the object isn't runnable or the second
+     * argument isn't a string.
+     */
     private fun cmdRun() {
+        // Parse the object to be run
+        val runnable = retrieveObject()
+        // Parse the string to be run on
+        val str = retrieveObject()
 
+        // Check that the second object is actually a string
+        if (str !is String) {
+            println("Your second argument needs to be a string!")
+            return
+        }
+
+        // If the object is actually a runnable, run it on the string.
+        val result = when (runnable) {
+            is FSA -> runnable.runString(str)
+            is RegExpr -> runnable.runOn(str)
+            is GNFA -> runnable.runOn(str)
+            else -> {
+                println("That object isn't an automaton!")
+                return
+            }
+        }
+
+        // Print the result
+        if (result)
+            println("accept")
+        else
+            println("reject")
     }
 
     /**
@@ -68,7 +126,7 @@ class Lexaard {
         return when(firstToken) {
         /** registered variables */
         // The object is a registered variable
-            in objectReg.keys -> objectReg[firstToken]
+            in varRegistry.keys -> varRegistry[firstToken]
 
         /** literal objects */
         // The object is a literal boolean
@@ -86,74 +144,94 @@ class Lexaard {
 
         /** functions */
             "nfa2dfa" -> {
-                val expectedFSA = retrieveObject()
-
-                if (expectedFSA is FSA)
-                    NFA.convertToDFA(expectedFSA)
+                val fsa = retrieveObject()
+                if (fsa is FSA)
+                    NFA.convertToDFA(fsa)
                 else null
             }
 
             "dfaUnion" -> {
-                val arg1 = retrieveObject()
-                val arg2 = retrieveObject()
-                if (arg1 is DFA && arg2 is DFA)
-                    DFA.union(arg1, arg2)
+                val dfa1 = retrieveObject()
+                val dfa2 = retrieveObject()
+                if (dfa1 is DFA && dfa2 is DFA)
+                    DFA.union(dfa1, dfa2)
                 else null
             }
 
             "nfaUnion" -> {
-                val arg1 = retrieveObject()
-                val arg2 = retrieveObject()
-                if (arg1 is NFA && arg2 is NFA)
-                    NFA.union(arg1, arg2)
+                val nfa1 = retrieveObject()
+                val nfa2 = retrieveObject()
+                if (nfa1 is NFA && nfa2 is NFA)
+                    NFA.union(nfa1, nfa2)
                 else null
             }
 
             "nfaConcat" -> {
-                val arg1 = retrieveObject()
-                val arg2 = retrieveObject()
-                if (arg1 is NFA && arg2 is NFA)
-                    NFA.concat(arg1, arg2)
+                val nfa1 = retrieveObject()
+                val nfa2 = retrieveObject()
+                if (nfa1 is NFA && nfa2 is NFA)
+                    NFA.concat(nfa1, nfa2)
                 else null
             }
 
             "nfaStar" -> {
-                val arg = retrieveObject()
-                if (arg is NFA)
-                    NFA.star(arg)
+                val nfa = retrieveObject()
+                if (nfa is NFA)
+                    NFA.star(nfa)
                 else null
             }
 
             "pruneFSA" -> {
-                val arg = retrieveObject()
-                if (arg is FSA)
-                    FSA.prune(arg)
+                val fsa = retrieveObject()
+                if (fsa is FSA)
+                    FSA.prune(fsa)
                 else null
             }
 
             "fsaEquivP" -> {
-                val arg1 = retrieveObject()
-                val arg2 = retrieveObject()
-                if (arg1 is FSA && arg2 is FSA)
-                    FSA.equivP(arg1, arg2)
+                val fsa1 = retrieveObject()
+                val fsa2 = retrieveObject()
+                if (fsa1 is FSA && fsa2 is FSA)
+                    FSA.equivP(fsa1, fsa2)
                 else null
             }
 
             "regex2fsa" -> {
-                val arg = retrieveObject()
-                if (arg is RegExpr)
-                    FSA.regex2Fsa(arg)
+                val reg = retrieveObject()
+                if (reg is RegExpr)
+                    FSA.regex2Fsa(reg)
                 else null
             }
 
             "fsa2regex" -> {
-                val arg = retrieveObject()
-                if (arg is FSA)
-                    RegExpr.fsa2regex(arg)
+                val reg = retrieveObject()
+                if (reg is FSA)
+                    RegExpr.fsa2regex(reg)
                 else null
             }
 
-        // TODO: Homework 5 functions
+            "chomskyNF" -> {
+                val cfg = retrieveObject()
+                if (cfg is CFG)
+                    cfg.toChomskyNf()
+                else null
+            }
+
+            "cfgGen" -> {
+                val cfg = retrieveObject()
+                val str = retrieveObject()
+                if (cfg is CFG && str is String)
+                    cfg.checkGen(str)
+                else null
+            }
+
+            "cfgGenF" -> {
+                val cfg = retrieveObject()
+                val str = retrieveObject()
+                if (cfg is CFG && str is String)
+                    cfg.checkGenF(str)
+                else null
+            }
 
         /** Invalid input */
             else -> null

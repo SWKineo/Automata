@@ -242,12 +242,12 @@ public abstract class FSA {
     /**
      * Run the FSA on the given string
      * @param str: A string made up of characters in the FSA's alphabet
-     * @return "accept": if the FSA reaches an accept state after
-     *          reading in whole string, or "reject" if the FSA does not.
+     * @return true: if the FSA reaches an accept state after
+     *          reading in whole string, or false if the FSA does not.
      *          Running the FSA on a string containing characters outside
-     *          of the alphabet automatically returns "reject".
+     *          of the alphabet automatically returns false.
      */
-    public abstract String runString(String str);
+    public abstract boolean runString(String str);
 
     /**
      * Process a raw line of input and set the alphabet of the FSA to the
