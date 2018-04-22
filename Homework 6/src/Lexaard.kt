@@ -134,18 +134,21 @@ class Lexaard {
         return when(firstToken) {
 
         /** literal objects */
-        // The object is a literal boolean
+            // The object is a literal boolean
             "true" -> true
             "false" -> false
 
-        // The object is a literal FSA
+            // The object is a literal FSA
             "fsa" -> FSA.from(input)
 
-        // The object is a literal GNFA
+            // The object is a literal GNFA
             "gnfa" -> GNFA.from(pullRaw())
 
-        // The object is a literal CFG
+            // The object is a literal CFG
             "cfg" -> CFG.from(pullRaw())
+
+            // The object is a literal PDA
+            "pda" -> PDA.from(pullRaw())
 
         /** functions */
             "nfa2dfa" -> {
@@ -238,6 +241,20 @@ class Lexaard {
                 else null
             }
 
+            "cfg2pda" -> {
+                val cfg = retrieveObject()
+                if (cfg is CFG)
+                    cfg.toPda()
+                else null
+            }
+
+            "pda2cfg" -> {
+                val pda = retrieveObject()
+                if (pda is PDA)
+                    pda.toCfg()
+                else null
+            }
+
             else -> /** Check Regex matches last since they don't have an identifier */
                 if (firstToken.matches(Regex("(?:r\\.|r/|[\\w()|.*])+")))
                     // The object is a literal RegExpr
@@ -257,7 +274,7 @@ class Lexaard {
      */
     private fun pullRaw(): String {
         /* For convenience, we can assume we start on the same line as the
-         * identifier, so we want to move to skip the first line */
+         * identifier, so we skip the first line */
         input.nextLine()
         // StringBuilder to hold the intermediate String
         val builder = StringBuilder()

@@ -362,6 +362,16 @@ class CFG(private val name: String,
         return false
     }
 
+    /**
+     * Converts this CFG into an equivalent pushdown automaton.
+     */
+    fun toPda(): PDA {
+        /* Quick note: we can assume the provided CFG is well formed because it
+         * was successfully generated as a non-null CFG by retrieveObject(). */
+
+        return PDA()
+    }
+
     companion object {
         /** Regular expressions to match the different line types
          *
