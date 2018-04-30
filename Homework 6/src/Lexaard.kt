@@ -14,14 +14,10 @@ import java.util.*
 
 
 fun main(args: Array<String>) {
-    println(CFG.from(
-            "G1 p102\r\n" +
-                    "A -> 0 A 1\r\n" +
-                    "A -> B | 2\r\n" +
-                    "B -> # | 3\r\n" +
-                    ".. 0 1 # 4\r\n" +
-                    "A B C\r\n"
-    ).toString())
+
+    val map = hashMapOf("me" to 4, null to 6)
+    println(map[null])
+
     Lexaard().run()
 }
 

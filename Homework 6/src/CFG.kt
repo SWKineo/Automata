@@ -369,7 +369,7 @@ class CFG(private val name: String,
         /* Quick note: we can assume the provided CFG is well formed because it
          * was successfully generated as a non-null CFG by retrieveObject(). */
 
-        return PDA()
+        return PDA.from("")!!
     }
 
     companion object {
