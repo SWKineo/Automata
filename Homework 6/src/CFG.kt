@@ -1,4 +1,5 @@
 import java.util.*
+import kotlin.test.currentStackTrace
 
 /**
  * @author Spencer Ward
@@ -10,10 +11,10 @@ import java.util.*
  */
 
 class CFG(private val name: String,
-          private val variables: Set<String>,
-          private val terminals: Set<String>,
-          private val start: String,
-          private val rules: HashMap<String, Set<List<String>?>>) {
+          private val variables: Set<Char>,
+          private val terminals: Set<Char>,
+          private val start: Char,
+          private val rules: Map<Char, Set<List<Char>?>>) {
 
     /**
      * Get a String representation of the stored CFG, as described in Homework 5
@@ -47,7 +48,7 @@ class CFG(private val name: String,
 
         /* Filtering terminals is a little more tricky, since they need to be
          * checked against the values of the HashMap 'rules'. */
-        val tempUsed = mutableSetOf<String>()
+        val tempUsed = mutableSetOf<Char>()
         for (variable in rules.keys) {
             /* We can skip the null check since a rule without a right-hand
              * side would be considered a badly-formed line by the Regex
@@ -71,7 +72,7 @@ class CFG(private val name: String,
         /* Append the unused variables early and set a flag if they contain
          * the start state */
         val earlyVariables = unusedVariables.isNotEmpty()
-                                && unusedVariables[0] == start
+                && unusedVariables[0] == start
         if (earlyVariables) {
             for (variable in unusedVariables) {
                 builder.append(variable)
@@ -140,18 +141,18 @@ class CFG(private val name: String,
      */
     fun toChomskyNf(): CFG {
         // A mutable set for updating the variables.
-        val gVariables = mutableSetOf<String>()
+        val gVariables = mutableSetOf<Char>()
         gVariables.addAll(variables)
         /* Copy our original rules to a new mutable copy so we can preserve
          * the original CFG and edit the new rules on the fly */
-        val mutRules = hashMapOf<String, MutableSet<List<String>?>>()
+        val mutRules = hashMapOf<Char, MutableSet<List<Char>?>>()
         for (key in rules.keys)
             mutRules[key] = rules[key]!!.toMutableSet()
 
         /** create a new start */
         val gStart = findNewVariable(variables)
         gVariables.add(gStart)
-        mutRules[gStart] = mutableSetOf<List<String>?>(listOf(start))
+        mutRules[gStart] = mutableSetOf<List<Char>?>(listOf(start))
 
         /** trim epsilon rules */
         /* This looks absolutely awful but that's the downside of
@@ -177,7 +178,7 @@ class CFG(private val name: String,
                                         /* For every occurrence of the offending
                                          * variable, add a version of this
                                          * rule with the variable removed */
-                                        var tempRule: MutableList<String>? =
+                                        var tempRule: MutableList<Char>? =
                                                 mutableListOf()
                                         tempRule!!.addAll(rule)
                                         tempRule.removeAt(i)
@@ -213,9 +214,9 @@ class CFG(private val name: String,
                             mutRules[key]!!.remove(rule)
                             // Check if 'replaceable' has any rules
                             if (mutRules[replaceable] != null)
-                                /* Now we want to loop through the rules and
-                                 * replace 'replaceable' -> u with 'key' -> u.
-                                 */
+                            /* Now we want to loop through the rules and
+                             * replace 'replaceable' -> u with 'key' -> u.
+                             */
                                 for (replacedRule in mutRules[replaceable]!!) {
                                     mutRules[replaceable]!!.remove(replacedRule)
                                     mutRules[key]!!.add(replacedRule)
@@ -235,7 +236,7 @@ class CFG(private val name: String,
                     mutRules[key]!!.remove(rule)
                     // Create references to the current and next variables
                     var currentVar = key
-                    var nextVar = ""
+                    var nextVar: Char
                     for (element in rule) {
                         nextVar = findNewVariable(gVariables)
                         gVariables.add(nextVar)
@@ -292,7 +293,7 @@ class CFG(private val name: String,
         }
 
         // Convert the rules map to a non-mutable version to satisfy type checks
-        val gRules = hashMapOf<String, Set<List<String>?>>()
+        val gRules = hashMapOf<Char, Set<List<Char>?>>()
         for (key in mutRules.keys)
             gRules[key] = mutRules[key]!!.toSet()
 
@@ -308,12 +309,12 @@ class CFG(private val name: String,
     /**
      * Helper method to find a variable not in the given set
      */
-    private fun findNewVariable(variableSet: Set<String>): String {
+    private fun findNewVariable(variableSet: Set<Char>): Char {
         var newVar = 'A'
-        while (newVar.toString() in variableSet)
+        while (newVar in variableSet)
             newVar++
 
-        return newVar.toString()
+        return newVar
     }
 
     /**
@@ -363,13 +364,125 @@ class CFG(private val name: String,
     }
 
     /**
-     * Converts this CFG into an equivalent pushdown automaton.
+     * Converts this CFG into an equivalent pushdown automaton, using the
+     * method outlined in Lemma 2.21 of the textbook.
      */
     fun toPda(): PDA {
         /* Quick note: we can assume the provided CFG is well formed because it
          * was successfully generated as a non-null CFG by retrieveObject(). */
 
-        return PDA.from("")!!
+        val pTitle = name
+        val pStates = mutableSetOf("q0", "q1", "q2")
+        val pStart = "q0"
+        val qLoop = "q1"
+        val pAccept = "q2"
+        val pAlphabet = terminals
+        val pStack = mutableSetOf<Char?>()
+        val pTrans = mutableMapOf<String, MutableMap<Char?, MutableMap<Char?,
+                MutableSet<Pair<String, Char?>>?>>>()
+
+        // Copy the letters from the normal alphabet to the stack alphabet
+        pAlphabet.forEach { pStack.add(it) }
+        pStack.add('$')
+        pStack.add('S')
+
+        /* step 1 */
+        pdaPushString(
+                pStates, pTrans,
+                pStart, null, null,
+                qLoop, "S$")
+        // private val rules: HashMap<String, Set<List<String>?>>
+
+        /* step 2 */
+        // case (a)
+        for (variable in rules.keys) {
+            // Loop over the rules for each variable
+            if (rules[variable] != null) for (rule in rules[variable]!!) {
+                // Handle epsilon rules
+                if (rule == null) {
+                    // Add the transition directly
+                    PDA.addTrans(pTrans,
+                            qLoop, null, variable,
+                            Pair(qLoop, null))
+                } else {
+                    /* If this isn't an epsilon rule, compress its elements
+                     * into a string of characters */
+                    val ruleCompressed = StringBuilder()
+                    // Add each letter to the StringBuilder
+                    rule.forEach { ruleCompressed.append(it) }
+                    // Add a series of transitions to handle the rule
+                    pdaPushString(
+                            pStates, pTrans,
+                            qLoop, null, variable,
+                            qLoop, ruleCompressed.toString())
+                }
+            }
+        }
+        // case (b)
+        for (a in pAlphabet) {
+            /* We don't need to check if 'a' is in both the input and stack
+             * alphabets because we defined the stack alphabet for this
+             * automata to be the same as the input with a couple extra letters
+             */
+            // Add the transition directly
+            PDA.addTrans(pTrans,
+                    qLoop, a, a,
+                    Pair(qLoop, null))
+        }
+        // case (c)
+        // Add a direct transition to the accept state
+        PDA.addTrans(pTrans,
+                qLoop, null, '$',
+                Pair("q2", null))
+
+        return PDA(
+                pTitle,
+                pStates,
+                pStart,
+                setOf(pAccept),
+                pAlphabet,
+                pStack,
+                pTrans)
+    }
+
+    /**
+     * Helper function to fill in states and transitions to add multiple
+     * characters to the stack alphabet in a row
+     */
+    private fun pdaPushString(
+            states: MutableSet<String>,
+            trans: MutableMap<String, MutableMap<Char?, MutableMap<Char?,
+                    MutableSet<Pair<String, Char?>>?>>>,
+            sourceState: String,
+            activatingLetter: Char?,
+            activatingStack: Char?,
+            destState: String,
+            pushableString: String) {
+
+        if (pushableString.isEmpty()) return
+        if (pushableString.length == 1) {
+            PDA.addTrans(trans, sourceState, activatingLetter, activatingStack,
+                    Pair(destState, pushableString[0]))
+            return
+        }
+
+        var nextState = PDA.addNewState(states)
+        PDA.addTrans(trans, sourceState, activatingLetter, activatingStack,
+                Pair(nextState, pushableString.last()))
+        var currentState = nextState
+
+        // Loop until the last character of the string
+        for (l in pushableString.lastIndex - 1 downTo 1) {
+            nextState = PDA.addNewState(states)
+            PDA.addTrans(trans, currentState, null, null,
+                    Pair(nextState, pushableString[l]))
+            currentState = nextState
+        }
+
+        /* Link the current transition to the destination state to push the
+         * last character */
+        PDA.addTrans(trans, currentState, null, null,
+                Pair(destState, pushableString[0]))
     }
 
     companion object {
@@ -397,12 +510,12 @@ class CFG(private val name: String,
             rawScan.nextLine()
 
             // Create collections to start reading in input
-            val gVariables = mutableSetOf<String>()
-            val gTerminals = mutableSetOf<String>()
-            val mutRules = hashMapOf<String, MutableSet<List<String>?>>()
+            val gVariables = mutableSetOf<Char>()
+            val gTerminals = mutableSetOf<Char>()
+            val mutRules = hashMapOf<Char, MutableSet<List<Char>?>>()
 
             // Create a mutable variable to hold the start state
-            var gStart: String? = null
+            var gStart: Char? = null
 
             /* Set of unrecognized Strings encountered during rule parsing.
              *
@@ -412,7 +525,7 @@ class CFG(private val name: String,
              * This distinction can't be made while parsing each rule, because
              * not all of the variables can be assumed to have been registered.
              */
-            val unknownElements = mutableSetOf<String>()
+            val unknownElements = mutableSetOf<Char>()
 
             // Parse each line
             while (rawScan.hasNext()) {
@@ -425,13 +538,13 @@ class CFG(private val name: String,
                         /* The line is a rule */
 
                         // Read in the variable being described
-                        val variable = lineScan.next()
+                        val variable = lineScan.next()[0]
 
                         /* If a start variable hasn't been registered yet, count
                          * this variable as the new start */
                         if (gStart == null) gStart = variable
 
-                        val results = mutableSetOf<List<String>?>()
+                        val results = mutableSetOf<List<Char>?>()
                         // Skip over the rule identifier
                         lineScan.next("->")
                         while (lineScan.hasNext()) {
@@ -441,10 +554,10 @@ class CFG(private val name: String,
                             if (lineScan.hasNext("..")) {
                                 results.add(null)
                             } else {
-                                val result = mutableListOf<String>()
+                                val result = mutableListOf<Char>()
                                 while (lineScan.hasNext() &&
                                         !lineScan.hasNext("\\|")) {
-                                    val elmnt = lineScan.next()
+                                    val elmnt = lineScan.next()[0]
                                     result.add(elmnt)
 
 
@@ -482,13 +595,13 @@ class CFG(private val name: String,
                          * that this null check doesn't need to be done for every
                          * variable. */
                         if (gStart == null) {
-                            gStart = lineScan.next()
+                            gStart = lineScan.next()[0]
                             gVariables.add(gStart)
                         }
 
                         // Read in (the rest of) the variables
                         while (lineScan.hasNext()) {
-                            gVariables.add(lineScan.next())
+                            gVariables.add(lineScan.next()[0])
                         }
                     }
                     line.matches(matchTerminals) -> {
@@ -498,7 +611,7 @@ class CFG(private val name: String,
                         lineScan.next("..")
                         // Read in the terminals
                         while (lineScan.hasNext()) {
-                            gTerminals.add(lineScan.next())
+                            gTerminals.add(lineScan.next()[0])
                         }
                     }
                     else -> return null /* The line is invalid */
@@ -526,7 +639,7 @@ class CFG(private val name: String,
              * Move the rules to a non-mutable set since we don't want to change
              * the CFG after it's been created
              */
-            val gRules = hashMapOf<String, Set<List<String>?>>()
+            val gRules = hashMapOf<Char, Set<List<Char>?>>()
             for (key in mutRules.keys)
                 gRules[key] = mutRules[key]!!.toSet()
 

@@ -61,13 +61,170 @@ class PDA(val title: String,
                 = trans[state]?.get(inputChar)?.get(stackChar)
 
     /**
-     * Convert this PDA into an equivalent context-free grammar.
+     * Convert this PDA into an equivalent context-free grammar, as outlined
+     * in Lemma 2.27
      */
     fun toCfg(): CFG {
         /* Quick note: we can assume the provided PDA is well formed because it
          * was successfully generated as a non-null PDA by retrieveObject(). */
 
-        return CFG.from("")!!
+        /* Modify the PDA to make the conversion simpler */
+        // (The inline function 'toMutableList(..)' makes a copy of the set)
+        val newStates = states.toMutableList()
+        val emptyStackState = addNewState(newStates)
+        val newAccept = addNewState(newStates)
+        val newTrans = mutableMapOf<String, MutableMap<Char?, MutableMap<Char?,
+                            MutableSet<Pair<String, Char?>>?>>>()
+        // Make a mutable copy of the transition map
+        for (state in trans.keys) {
+            newTrans[state] = mutableMapOf()
+            for (a in trans[state]!!.keys) {
+                newTrans[state]!![a] = mutableMapOf()
+                for (s in trans[state]!![a]!!.keys) {
+                    val desired = trans[state]!![a]!![s]
+                    // Don't need to add a transition if the transition is null
+                    if (desired != null)
+                        newTrans[state]!![a]!![s]!!.toMutableSet()
+                }
+            }
+        }
+        // Reduce the PDA so its only accept state is 'newAccept'
+        for (accept in acceptStates) {
+            addTrans(newTrans,
+                    accept, null, null,
+                    Pair(emptyStackState, null))
+        }
+        // Make the PDA empty its stack before accepting
+        for (a in alphabet) {
+            /* Loop on the state 'emptyStackState' until there are no more
+             * letters to remove */
+            addTrans(newTrans,
+                    emptyStackState, null, a,
+                    Pair(emptyStackState, null))
+        }
+        // Remove the final 'S' and '$'
+        addTrans(newTrans,
+                emptyStackState, null, 'S',
+                Pair(emptyStackState, null))
+        // Move to the accept state after removing the end marker
+        addTrans(newTrans,
+                emptyStackState, null, '$',
+                Pair(newAccept, null))
+        /* Set the automaton to either push or pop on every
+         * transition */
+        for (state in newTrans.keys) {
+            for (a in trans[state]!!.keys) {
+                for (pop in trans[state]!![a]!!.keys) {
+                    val dest = trans[state]!![a]!![pop]
+                    if (dest != null) for ((next, push) in dest) {
+                        // Replace simultaneous pushes and pops
+                        if (pop != null && push != null) {
+                            val between = addNewState(newStates)
+                            addTrans(newTrans,
+                                    state, a, push,
+                                    Pair(between, null))
+                            addTrans(newTrans,
+                                    between, null, null,
+                                    Pair(next, pop))
+                        } else if (pop == null && push == null) {
+                            val between = addNewState(newStates)
+                            addTrans(newTrans,
+                                    state, a, null,
+                                    Pair(between, '$'))
+                            addTrans(newTrans,
+                                    between, null, '$',
+                                    Pair(next, null))
+                        }
+                    }
+                }
+            }
+        }
+
+        /* Start of actual conversion */
+
+        /* Generate the variables of G by using a Map to keep track of them
+         * while building the automaton. This way we can access variables
+         * implicitly using vars[p]!![q]!! to represent A_p,q */
+        var varName = 'A'
+        val vars = mutableMapOf<String, MutableMap<String, Char>>()
+        // Loop over the states
+        for (p in newStates) {
+            for (q in newStates) {
+                // Initialize parts of the map if they don't exist
+                if (vars[p] == null) vars[p] = mutableMapOf()
+                // Add the variable name and move to the next letter
+                vars[p]!![q] = varName
+                varName++
+            }
+        }
+
+        // Create fields for the new CFG
+        val pName = title
+        val pVariables = mutableSetOf<Char>()
+        val pTerminals = mutableSetOf<Char>()
+        val pStart = vars[startState]!![newAccept]!!
+        val pRules = mutableMapOf<Char, MutableSet<List<Char>?>>()
+
+        /* step 1 */
+        for (p in newStates) for (q in newStates) for (r in newStates)
+            for (s in newStates) for (u in stackAlphabet) {
+                // Create a modified alphabet to ensure epsilon is included
+                val alphaEps = alphabet.toMutableSet()
+                alphaEps.add(null)
+                for (a in alphaEps) for (b in alphaEps) {
+                    // Safely find the desired transitions
+                    val firstCheck = newTrans[p]?.get(a)?.get(null)
+                    val secondCheck = newTrans[s]?.get(b)?.get(u)
+                    // Check the transitions if the exist
+                    if (firstCheck != null && secondCheck != null
+                            && firstCheck.contains(Pair(r, u))
+                            && secondCheck.contains(Pair(q, null))) {
+                        /* If they do, add the necessary rule.
+                         *
+                         * Since null terminals represent epsilon
+                         * transitions, removing them from the rule has the
+                         * same effect as leaving them in, as long as there
+                         * are some non-epsilon terminals left in the rule.
+                         *
+                         * If there aren't, we label this as an epsilon rule
+                         * by marking it as 'null'
+                         */
+                        val destination = listOfNotNull(a, vars[r]!![s]!!, b)
+                        if (destination.isEmpty())
+                            addRule(pRules, vars[p]!![q]!!, null)
+                        else
+                            addRule(pRules, vars[p]!![q]!!, destination)
+                    }
+                }
+        }
+        /* step 2 */
+        for (p in newStates) for (q in newStates) for (r in newStates) {
+                    addRule(pRules, vars[p]!![q]!!,
+                            listOf(vars[p]!![r]!!, vars[r]!![q]!!))
+        }
+        /* step 3 */
+        for (p in newStates) {
+            addRule(pRules, vars[p]!![p]!!, null)
+        }
+
+        return CFG(
+                pName,
+                pVariables,
+                pTerminals,
+                pStart,
+                pRules)
+    }
+
+    /**
+     * Helper function to set rules in CFGs
+     *
+     * (I don't know why I didn't make one of these for the last assignment)
+     */
+    private fun addRule(rules: MutableMap<Char, MutableSet<List<Char>?>>,
+                        variable: Char,
+                        addition: List<Char>?) {
+        if (rules[variable] == null) rules[variable] = mutableSetOf()
+        rules[variable]!!.add(addition)
     }
 
     /**
@@ -219,8 +376,8 @@ class PDA(val title: String,
             var mStart: String? = null
             val mAccept = mutableSetOf<String>()
             val mStates = mutableSetOf<String>()
-            val mTrans = hashMapOf<String, HashMap<Char?, HashMap<Char?,
-                                        MutableSet<Pair<String, Char?>>?>>>()
+            val mTrans = mutableMapOf<String, MutableMap<Char?,
+                    MutableMap<Char?, MutableSet<Pair<String, Char?>>?>>>()
 
             // Parse the transition table
             var line = lines.nextLine()
@@ -285,10 +442,13 @@ class PDA(val title: String,
          *
          * Initializes everything that hasn't already been accessed
          */
-        private fun addTrans(trans: HashMap<String, HashMap<Char?, HashMap<Char?,
-                                MutableSet<Pair<String, Char?>>?>>>,
-                             state: String, inputChar: Char?, stackChar: Char?,
-                             pair: Pair<String, Char?>) {
+        fun addTrans(trans: MutableMap<String,
+                            MutableMap<Char?,
+                            MutableMap<Char?, MutableSet<Pair<String, Char?>>?>>>,
+                     state: String,
+                     inputChar: Char?,
+                     stackChar: Char?,
+                     pair: Pair<String, Char?>) {
             // Make sure everything's initialized
             if (trans[state] == null)
                 trans[state] = hashMapOf()
@@ -298,6 +458,31 @@ class PDA(val title: String,
                 trans[state]!![inputChar]!![stackChar] = mutableSetOf()
 
             trans[state]!![inputChar]!![stackChar]!!.add(pair)
+        }
+
+        /**
+         * A helper function to add a new state to the automata. Returns the
+         * name of the state that was just added.\
+         */
+        fun addNewState(states: MutableCollection<String>): String {
+            // Create the base for the state name and its identifier
+            var stateBase = "q"
+            var stateIdentifier = 0
+
+            // Create a variable to hold the state as it's being tested
+            var newState: String
+
+            /* Check each combination of base and identifier until we find one
+             * that hasn't been used before */
+            do {
+                newState = "$stateBase$stateIdentifier"
+                stateIdentifier++
+            } while (newState in states)
+
+            // Add the new state to the automata
+            states.add(newState)
+
+            return newState
         }
     }
 }

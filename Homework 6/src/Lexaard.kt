@@ -14,10 +14,6 @@ import java.util.*
 
 
 fun main(args: Array<String>) {
-
-    val map = hashMapOf("me" to 4, null to 6)
-    println(map[null])
-
     Lexaard().run()
 }
 
